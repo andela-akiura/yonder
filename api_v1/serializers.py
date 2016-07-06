@@ -2,3 +2,42 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from models import Image
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(max_length=100, required=True)
+    username = serializers.CharField(max_length=100, required=True)
+    first_name = serializers.CharField(max_length=100, required=True)
+    last_name = serializers.CharField(max_length=100, required=True)
+    password = serializers.CharField(max_length=100,
+                                     style={'input_type': 'password'},
+                                     required=True, write_only=True)
+    confirm_password = serializers.CharField(max_length=100,
+                                             style={'input_type': 'password'},
+                                             required=True, write_only=True)
+
+    def validate(self, data):
+        try:
+            validate_email(data['email'])
+            return data
+        except ValidationError:
+            raise serializers.ValidationError('The email is invalid.')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password',
+                  'confirm_password')
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    image_file = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=True)
+    image_url = serializers.URLField(max_length=200, required=True)
+    image_name = serializers.CharField(max_length=100, required=True)
+
+    class Meta:
+        model = Image
+        fields = ('id', 'created_by', 'image_name', 'image_url')

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    This is the shit.
+    <li>
+        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Log in with Facebook</a>
+    </li>
+  </body>
+</html>

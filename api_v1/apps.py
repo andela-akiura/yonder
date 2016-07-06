@@ -3,5 +3,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class YonderConfig(AppConfig):
-    name = 'yonder'
+class pixlrConfig(AppConfig):
+    name = 'pixlr'

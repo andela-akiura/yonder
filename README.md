@@ -1,2 +1,2 @@
-# yonder
+# pixlr
 A photo editing application.
