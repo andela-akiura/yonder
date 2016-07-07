@@ -6,6 +6,8 @@
   </head>
   <body>
     This is the shit.
-    <button></button>
+    <li>
+        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Log in with Facebook</a>
+    </li>
   </body>
 </html>
