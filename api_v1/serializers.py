@@ -29,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'first_name', 'last_name', 'password',
                   'confirm_password')
 
+
 class FilteredImageSerializer(serializers.ModelSerializer):
     image_file = serializers.ImageField(
         max_length=None,
@@ -40,6 +41,7 @@ class FilteredImageSerializer(serializers.ModelSerializer):
         model = FilteredImage
         fields = ('id', 'image_name', 'image_file', 'created_by',
                   'folder_name')
+
 
 class ImageSerializer(serializers.ModelSerializer):
     image_file = serializers.ImageField(
@@ -53,6 +55,7 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ('id', 'image_name', 'image_file', 'filtered_images',
                   'created_by', 'folder_name')
+
 
 class ThumbnailImageSerializer(serializers.ModelSerializer):
     image_file = serializers.ImageField(

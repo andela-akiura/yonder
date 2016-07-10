@@ -1,14 +1,12 @@
 """Endpoints to allow for user creation, image upload & filtering."""
 from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView
-from models import Image
-from rest_framework import generics
+from models import Image, FilteredImage, ThumbnailImage
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from serializers import UserSerializer, ImageSerializer
+from serializers import UserSerializer, ImageSerializer, FilteredImageSerializer
 
 
 class UserCreateView(viewsets.ModelViewSet):
@@ -36,12 +34,24 @@ class UserCreateView(viewsets.ModelViewSet):
             return Response({'error': 'The passwords do not match'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
 class ImageView(viewsets.ModelViewSet):
+    """
+    Upload and access images.
+
+    URL:
+        /api/v1/images/
+
+    Methods:
+        GET, POST
+    """
+
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
     permission_classes = (AllowAny,)
 
     def create(self, request):
+        """Upload Images."""
         data = request.data
         image_name, image_file = data.get('image_name'), data.get('image_file')
         created_by = request.user.username if request.user.username else ''
@@ -58,5 +68,21 @@ class ImageView(viewsets.ModelViewSet):
                              'Image file not uploaded.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, pk):
-        import ipdb; ipdb.set_trace()
+
+class FilterImageView(viewsets.ModelViewSet):
+    """
+    Upload and apply image filters.
+
+    URL:
+        /api/v1/images/<id>/
+
+    Methods:
+        GET, POST
+    """
+
+    queryset = FilteredImage.objects.all()
+    serializer_class = FilteredImageSerializer
+    permission_classes = (AllowAny,)
+
+    def create(self, image):
+        pass

@@ -18,12 +18,16 @@ from django.conf.urls import url, include
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^api/v1/', include('api_v1.urls', namespace='images')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
-    url(r'^', TemplateView.as_view(template_name='index.html')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
