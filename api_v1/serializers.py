@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from models import Image
+from models import Image, FilteredImage, ThumbnailImage
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,14 +30,41 @@ class UserSerializer(serializers.ModelSerializer):
                   'confirm_password')
 
 
+class FilteredImageSerializer(serializers.ModelSerializer):
+    image_file = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=True)
+    image_name = serializers.CharField(max_length=100, required=True)
+
+    class Meta:
+        model = FilteredImage
+        fields = ('id', 'image_name', 'image_file', 'created_by',
+                  'folder_name')
+
+
 class ImageSerializer(serializers.ModelSerializer):
     image_file = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
         use_url=True)
-    image_url = serializers.URLField(max_length=200, required=True)
     image_name = serializers.CharField(max_length=100, required=True)
+    filtered_images = FilteredImageSerializer(many=True)
 
     class Meta:
         model = Image
-        fields = ('id', 'created_by', 'image_name', 'image_url')
+        fields = ('id', 'image_name', 'image_file', 'filtered_images',
+                  'created_by', 'folder_name')
+
+
+class ThumbnailImageSerializer(serializers.ModelSerializer):
+    image_file = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=True)
+    image_name = serializers.CharField(max_length=100, required=True)
+
+    class Meta:
+        model = ThumbnailImage
+        fields = ('id', 'image_name', 'image_file', 'created_by',
+                  'folder_name')

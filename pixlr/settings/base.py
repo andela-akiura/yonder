@@ -106,14 +106,14 @@ TEMPLATES = [
 ]
 
 STATICFILES_DIRS = (
-    'static',
+    os.path.join(BASE_DIR, '../static'),
 )
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
+MEDIA_ROOT = os.path.abspath('media')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = 'media'
 
 WSGI_APPLICATION = 'pixlr.wsgi.application'
 
