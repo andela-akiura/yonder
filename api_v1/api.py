@@ -57,3 +57,6 @@ class ImageView(viewsets.ModelViewSet):
             return Response({'error':
                              'Image file not uploaded.'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        import ipdb; ipdb.set_trace()
