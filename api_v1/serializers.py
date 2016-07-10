@@ -35,9 +35,9 @@ class ImageSerializer(serializers.ModelSerializer):
         max_length=None,
         allow_empty_file=False,
         use_url=True)
-    image_url = serializers.URLField(max_length=200, required=True)
     image_name = serializers.CharField(max_length=100, required=True)
 
     class Meta:
         model = Image
-        fields = ('id', 'created_by', 'image_name', 'image_url')
+        fields = ('id', 'image_name', 'image_file', 'created_by',
+                  'folder_name')

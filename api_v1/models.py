@@ -1,5 +1,4 @@
 from __future__ import unicode_literals  # pragma: no cover
-from django.contrib.auth.models import User # pragma: no cover
 from django.db import models  # pragma: no cover
 
 
@@ -12,3 +11,4 @@ class Image(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     image_name = models.CharField(max_length=100, blank=True, default='')
+    folder_name = models.CharField(max_length=100, blank=True, default='')

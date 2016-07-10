@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^api/v1/', include('api_v1.urls', namespace='images')),
-    url(r'^', TemplateView.as_view(template_name='index.html')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
+    url(r'^', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
