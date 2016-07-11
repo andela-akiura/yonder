@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from serializers import UserSerializer, ImageSerializer
 from filter_boy import Filter
-
+import os
 
 
 class UserCreateView(viewsets.ModelViewSet):
@@ -74,18 +74,22 @@ class ImageView(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         filter_name = request.data.get('filter_name', 'NONE')
-        if filter_name is not 'NONE':
-            image = Image.objects.get(pk=pk)
-            original = image.original_image
-            name, extension = ''.join(original.file.name.split('.')[0:-1]), \
-                '.' + ''.join(original.file.name.split('.')[-1])
-            path = name + 'f' + extension
-            Filter.blur(image.original_image, path)
-            image.filtered_image = File(file(path))
-            image.save()
-            data = {'id': image.id, filter_name: image.filter_name,
-                    'original_image': image.original_image,
-                    'filtered_image': image.filtered_image}
-            serializer = self.get_serializer(data=data)
-            if serializer.is_valid():
-                return Response(serializer.data)
+        image = Image.objects.get(pk=pk)
+        original = image.original_image
+        name, extension = ''.join(original.file.name.split('.')[0:-1]), \
+            '.' + ''.join(original.file.name.split('.')[-1])
+        path = name + 'f' + extension
+        if filter_name == 'BLUR':
+            photo = Filter.blur(image.original_image, path)
+        elif filter_name == 'SMOOTH':
+            photo = Filter.smooth(image.original_image, path)
+        elif filter_name == 'GRAYSCALE':
+            photo = Filter.grayscale(image.original_image, path)
+        temp = File(file(path))
+        path = path.split('pixlr')[-1]
+        image.filtered_image = path
+        image.save()
+        serializer = ImageSerializer(image)
+        serializer = self.get_serializer(data=serializer.data)
+        serializer.is_valid()
+        return Response(serializer.data)
