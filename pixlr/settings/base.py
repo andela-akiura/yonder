@@ -85,7 +85,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('FB_SECRET')
 
 ROOT_URLCONF = 'pixlr.urls'
 
-SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
 
 TEMPLATES = [
     {
