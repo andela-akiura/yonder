@@ -1,5 +1,6 @@
 appnope==0.1.0
 backports.shutil-get-terminal-size==1.0.0
+boto==2.41.0
 coverage==4.0.3
 decorator==4.0.9
 dj-database-url==0.4.1
@@ -8,6 +9,7 @@ Django==1.9.5
 django-allauth==0.25.2
 django-filter==0.13.0
 django-nose==1.4.3
+django-storages==1.4.1
 django-test==0.4030
 djangorestframework==3.3.3
 djangorestframework-jwt==1.8.0

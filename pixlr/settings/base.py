@@ -29,7 +29,8 @@ PREREQ_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_docs',
-    'social.apps.django_app.default'
+    'social.apps.django_app.default',
+    'storages',
 ]
 
 PROJECT_APPS = [
@@ -85,7 +86,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('FB_SECRET')
 
 ROOT_URLCONF = 'pixlr.urls'
 
-SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
 
 TEMPLATES = [
     {
@@ -105,6 +105,16 @@ TEMPLATES = [
     },
 ]
 
+# Amazon S3 settings
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_S3_SECURE_URLS = True      # use https
+AWS_QUERYSTRING_AUTH = True
+AWS_S3_ACCESS_KEY_ID = os.getenv('AWS_S3_ACCESS_KEY_ID')
+AWS_S3_SECRET_ACCESS_KEY = os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, '../static'),
 )
@@ -112,6 +122,8 @@ STATICFILES_DIRS = (
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
 
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 MEDIA_ROOT = os.path.abspath('media')
 MEDIA_URL = '/media/'
 
