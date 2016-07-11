@@ -12,7 +12,7 @@ FILTERS = (
     ('SMOOTH', 'smoothen'),
     ('SHARPEN', 'sharpen'),
     ('FLIP', 'flip'),
-    ('GRAYSCALE ', 'grayscale'),
+    ('GRAYSCALE', 'grayscale'),
     ('FIND_EDGES', 'find edges'),
 )
 storage = CustomStorage()

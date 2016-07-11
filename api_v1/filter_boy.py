@@ -1,6 +1,6 @@
 """Helper module to apply filters to images."""
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageEnhance
 
 
 class Filter():
@@ -14,5 +14,22 @@ class Filter():
         """Return a blurred image."""
         image = Image.open(photo)
         image = image.filter(ImageFilter.BLUR)
+        image.save(name)
+        return photo
+
+    @staticmethod
+    def smooth(photo, name):
+        """Return a smoothened image."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.SMOOTH)
+        image.save(name)
+        return photo
+
+    @staticmethod
+    def grayscale(photo, name):
+        """Return a black & white image."""
+        image = Image.open(photo)
+        enhancer = ImageEnhance.Color(image)
+        image = enhancer.enhance(0.0)
         image.save(name)
         return photo
