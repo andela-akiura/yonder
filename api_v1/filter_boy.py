@@ -9,10 +9,10 @@ class Filter():
     def __init__(self):
         pass
 
-    def blur(self, filter_name, photo):
+    @staticmethod
+    def blur(photo, name):
         """Return a blurred image."""
         image = Image.open(photo)
-        name = image.filename
-        image.filter(ImageFilter.BLUR)
+        image = image.filter(ImageFilter.BLUR)
         image.save(name)
         return photo
