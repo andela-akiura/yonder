@@ -1,12 +1,15 @@
 """Endpoints to allow for user creation, image upload & filtering."""
 from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView
-from models import Image, FilteredImage, ThumbnailImage
+from django.core.files import File
+from models import Image, ThumbnailImage
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from serializers import UserSerializer, ImageSerializer, FilteredImageSerializer
+from serializers import UserSerializer, ImageSerializer
+from filter_boy import Filter
+
 
 
 class UserCreateView(viewsets.ModelViewSet):
@@ -43,7 +46,7 @@ class ImageView(viewsets.ModelViewSet):
         /api/v1/images/
 
     Methods:
-        GET, POST
+        GET, PUT, POST
     """
 
     queryset = Image.objects.all()
@@ -53,36 +56,36 @@ class ImageView(viewsets.ModelViewSet):
     def create(self, request):
         """Upload Images."""
         data = request.data
-        image_name, image_file = data.get('image_name'), data.get('image_file')
+        folder_name, original_image = data.get('folder_name'), \
+            data.get('original_image')
         created_by = request.user.username if request.user.username else ''
-        if image_file:
-            image = Image.objects.create(image_name=image_name,
-                                         image_file=image_file,
+        if original_image:
+            image = Image.objects.create(folder_name=folder_name,
+                                         original_image=original_image,
                                          created_by=created_by)
             return Response({'id': image.id,
-                             'image_url': image.image_file.url,
-                             'image_name': image.image_name},
+                             'image_url': image.original_image.url,
+                             'folder_name': image.folder_name},
                             status=status.HTTP_201_CREATED)
         else:
             return Response({'error':
                              'Image file not uploaded.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-
-class FilterImageView(viewsets.ModelViewSet):
-    """
-    Upload and apply image filters.
-
-    URL:
-        /api/v1/images/<id>/
-
-    Methods:
-        GET, POST
-    """
-
-    queryset = FilteredImage.objects.all()
-    serializer_class = FilteredImageSerializer
-    permission_classes = (AllowAny,)
-
-    def create(self, image):
-        pass
+    def update(self, request, pk):
+        filter_name = request.data.get('filter_name', 'NONE')
+        if filter_name is not 'NONE':
+            image = Image.objects.get(pk=pk)
+            original = image.original_image
+            name, extension = ''.join(original.file.name.split('.')[0:-1]), \
+                '.' + ''.join(original.file.name.split('.')[-1])
+            path = name + 'f' + extension
+            Filter.blur(image.original_image, path)
+            image.filtered_image = File(file(path))
+            image.save()
+            data = {'id': image.id, filter_name: image.filter_name,
+                    'original_image': image.original_image,
+                    'filtered_image': image.filtered_image}
+            serializer = self.get_serializer(data=data)
+            if serializer.is_valid():
+                return Response(serializer.data)
