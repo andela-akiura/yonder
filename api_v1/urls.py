@@ -18,10 +18,12 @@ from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import refresh_jwt_token
 from api import UserCreateView, ImageView
-from rest_framework.routers import DefaultRouter
+# from rest_framework.routers import DefaultRouter
+from rest_framework_nested import routers
 
-router = DefaultRouter()
+router = routers.SimpleRouter()
 router.register(r'images', ImageView)
+
 
 urlpatterns = [
     url(r'^', include(router.urls)),
