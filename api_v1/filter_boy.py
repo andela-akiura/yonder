@@ -41,4 +41,11 @@ class Filter():
         image = image.filter(ImageFilter.DETAIL)
         image.save(name)
         return photo
+
+    @staticmethod
+    def contour(photo, name):
+        """Enhance the detail on an image."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.CONTOUR)
+        image.save(name)
         return photo

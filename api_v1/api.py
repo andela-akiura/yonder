@@ -87,6 +87,8 @@ class ImageView(viewsets.ModelViewSet):
             photo = Filter.grayscale(image.original_image, path)
         elif filter_name == 'DETAIL':
             photo = Filter.detail(image.original_image, path)
+        elif filter_name == 'CONTOUR':
+            photo = Filter.contour(image.original_image, path)
         # temp = File(file(path))
         path = path.split('pixlr')[-1]
         image.filtered_image = path
