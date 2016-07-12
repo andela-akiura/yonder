@@ -75,6 +75,7 @@ class ImageView(viewsets.ModelViewSet):
     def update(self, request, pk):
         filter_name = request.data.get('filter_name', 'NONE')
         image = Image.objects.get(pk=pk)
+        image.filter_name = filter_name
         original = image.original_image
         name, extension = ''.join(original.file.name.split('.')[0:-1]), \
             '.' + ''.join(original.file.name.split('.')[-1])
