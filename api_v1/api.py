@@ -111,21 +111,8 @@ class ImageView(viewsets.ModelViewSet):
             elif filter_name == 'EDGE_ENHANCE':
                 photo = Filter.edge_enhance(image.original_image, path)
             image.filtered_image = 'images/' + os.path.basename(path)
-            # import ipdb; ipdb.set_trace()
         image.save()
         serializer = ImageSerializer(image)
         serializer = self.get_serializer(data=serializer.data)
         serializer.is_valid()
         return Response(serializer.data)
-
-
-# 1. Get the name of original image
-# b. Delete the original image.
-# 2. Replace original image with filtered image
-# 3. Delete filtered Image.
-# 4. Make filtered image null.
-
-# 1. Save name of original Image
-# 2. Equate original image to filtered Image
-# 3. Nullify filtered Image
-# 3. Rename orignal image to earlier name
