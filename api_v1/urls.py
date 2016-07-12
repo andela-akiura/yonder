@@ -23,6 +23,7 @@ from rest_framework_nested import routers
 
 router = routers.SimpleRouter()
 router.register(r'images', ImageView)
+router.register(r'filters', ImageView)
 
 
 urlpatterns = [

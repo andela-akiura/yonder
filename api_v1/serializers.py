@@ -40,11 +40,13 @@ class ImageSerializer(serializers.ModelSerializer):
         max_length=None,
         allow_empty_file=False,
         use_url=True)
+    save_changes = serializers.IntegerField(max_value=1, min_value=0,
+                                            required=False)
 
     class Meta:
         model = Image
-        fields = ('id', 'filter_name', 'original_image', 'filtered_image',
-                  'created_by', 'folder_name')
+        fields = ('id', 'save_changes', 'filter_name', 'original_image',
+                  'filtered_image', 'created_by', 'folder_name')
 
 
 class ThumbnailImageSerializer(serializers.ModelSerializer):

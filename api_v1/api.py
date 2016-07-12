@@ -74,34 +74,55 @@ class ImageView(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         filter_name = request.data.get('filter_name', 'NONE')
+        save_changes = request.data.get('save_changes', 0)
         image = Image.objects.get(pk=pk)
         image.filter_name = filter_name
-        original = image.original_image
+        original, filtered = image.original_image, image.filtered_image
         name, extension = ''.join(original.file.name.split('.')[0:-1]), \
             '.' + ''.join(original.file.name.split('.')[-1])
         path = name + 'f' + extension
-        if filter_name == 'BLUR':
-            photo = Filter.blur(image.original_image, path)
-        elif filter_name == 'SMOOTH':
-            photo = Filter.smooth(image.original_image, path)
-        elif filter_name == 'GRAYSCALE':
-            photo = Filter.grayscale(image.original_image, path)
-        elif filter_name == 'DETAIL':
-            photo = Filter.detail(image.original_image, path)
-        elif filter_name == 'CONTOUR':
-            photo = Filter.contour(image.original_image, path)
-        elif filter_name == 'EMBOSS':
-            photo = Filter.emboss(image.original_image, path)
-        elif filter_name == 'SHARPEN':
-            photo = Filter.sharpen(image.original_image, path)
-        elif filter_name == 'FIND_EDGES':
-            photo = Filter.find_edges(image.original_image, path)
-        elif filter_name == 'EDGE_ENHANCE':
-            photo = Filter.edge_enhance(image.original_image, path)
-        path = path.split('pixlr')[-1]
-        image.filtered_image = path
+        if int(save_changes) == 1:
+            image.original_image = filtered.name
+            os.remove(original.file.name)
+            os.rename(filtered.file.name, original.file.name)
+            image.original_image = original.name
+            image.filtered_image = None
+            image.filter_name = 'NONE'
+        else:
+            if filter_name == 'BLUR':
+                photo = Filter.blur(image.original_image, path)
+            elif filter_name == 'SMOOTH':
+                photo = Filter.smooth(image.original_image, path)
+            elif filter_name == 'GRAYSCALE':
+                photo = Filter.grayscale(image.original_image, path)
+            elif filter_name == 'DETAIL':
+                photo = Filter.detail(image.original_image, path)
+            elif filter_name == 'CONTOUR':
+                photo = Filter.contour(image.original_image, path)
+            elif filter_name == 'EMBOSS':
+                photo = Filter.emboss(image.original_image, path)
+            elif filter_name == 'SHARPEN':
+                photo = Filter.sharpen(image.original_image, path)
+            elif filter_name == 'FIND_EDGES':
+                photo = Filter.find_edges(image.original_image, path)
+            elif filter_name == 'EDGE_ENHANCE':
+                photo = Filter.edge_enhance(image.original_image, path)
+            image.filtered_image = 'images/' + os.path.basename(path)
+            # import ipdb; ipdb.set_trace()
         image.save()
         serializer = ImageSerializer(image)
         serializer = self.get_serializer(data=serializer.data)
         serializer.is_valid()
         return Response(serializer.data)
+
+
+# 1. Get the name of original image
+# b. Delete the original image.
+# 2. Replace original image with filtered image
+# 3. Delete filtered Image.
+# 4. Make filtered image null.
+
+# 1. Save name of original Image
+# 2. Equate original image to filtered Image
+# 3. Nullify filtered Image
+# 3. Rename orignal image to earlier name
