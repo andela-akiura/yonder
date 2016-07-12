@@ -85,7 +85,9 @@ class ImageView(viewsets.ModelViewSet):
             photo = Filter.smooth(image.original_image, path)
         elif filter_name == 'GRAYSCALE':
             photo = Filter.grayscale(image.original_image, path)
-        temp = File(file(path))
+        elif filter_name == 'DETAIL':
+            photo = Filter.detail(image.original_image, path)
+        # temp = File(file(path))
         path = path.split('pixlr')[-1]
         image.filtered_image = path
         image.save()

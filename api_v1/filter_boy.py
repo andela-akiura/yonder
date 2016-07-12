@@ -33,3 +33,12 @@ class Filter():
         image = enhancer.enhance(0.0)
         image.save(name)
         return photo
+
+    @staticmethod
+    def detail(photo, name):
+        """Enhance the detail on an image."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.DETAIL)
+        image.save(name)
+        return photo
+        return photo
