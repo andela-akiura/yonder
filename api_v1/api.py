@@ -93,6 +93,8 @@ class ImageView(viewsets.ModelViewSet):
             photo = Filter.emboss(image.original_image, path)
         elif filter_name == 'SHARPEN':
             photo = Filter.sharpen(image.original_image, path)
+        elif filter_name == 'FIND_EDGES':
+            photo = Filter.find_edges(image.original_image, path)
         path = path.split('pixlr')[-1]
         image.filtered_image = path
         image.save()

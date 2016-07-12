@@ -65,3 +65,11 @@ class Filter():
         image = image.filter(ImageFilter.SHARPEN)
         image.save(name)
         return photo
+
+    @staticmethod
+    def find_edges(photo, name):
+        """Apply the FIND_EDGES filter."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.FIND_EDGES)
+        image.save(name)
+        return photo
