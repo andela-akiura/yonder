@@ -7,7 +7,7 @@ FILTERS = (
     ('BLUR', 'blur',),
     ('CONTOUR', 'contour',),
     ('DETAIL', 'detail'),
-    ('EDGE_ENHANCE', 'enhance'),
+    ('EDGE_ENHANCE', 'edge enhance'),
     ('EMBOSS', 'emboss'),
     ('SMOOTH', 'smoothen'),
     ('SHARPEN', 'sharpen'),

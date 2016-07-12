@@ -73,3 +73,11 @@ class Filter():
         image = image.filter(ImageFilter.FIND_EDGES)
         image.save(name)
         return photo
+
+    @staticmethod
+    def edge_enhance(photo, name):
+        """Apply the EDGE_ENHANCE filter."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.EDGE_ENHANCE)
+        image.save(name)
+        return photo
