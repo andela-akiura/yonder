@@ -57,3 +57,11 @@ class Filter():
         image = image.filter(ImageFilter.EMBOSS)
         image.save(name)
         return photo
+
+    @staticmethod
+    def sharpen(photo, name):
+        """Apply the SHARPEN filter."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.SHARPEN)
+        image.save(name)
+        return photo
