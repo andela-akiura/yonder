@@ -46,7 +46,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ('id', 'save_changes', 'filter_name', 'original_image',
-                  'filtered_image', 'created_by', 'folder_name')
+                  'filtered_image', 'created_by', 'folder_name', 'image_name')
 
 
 class ThumbnailImageSerializer(serializers.ModelSerializer):

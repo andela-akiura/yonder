@@ -63,8 +63,11 @@ class ImageView(viewsets.ModelViewSet):
             image = Image.objects.create(folder_name=folder_name,
                                          original_image=original_image,
                                          created_by=created_by)
+            image.image_name = os.path.basename(image.original_image.file.name)
+            image.save()
             return Response({'id': image.id,
                              'image_url': image.original_image.url,
+                             'image_name': image.image_name,
                              'folder_name': image.folder_name},
                             status=status.HTTP_201_CREATED)
         else:

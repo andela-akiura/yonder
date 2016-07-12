@@ -30,6 +30,7 @@ class Image(models.Model):
     filter_name = models.CharField(max_length=100, choices=FILTERS,
                                    default='NONE')
     folder_name = models.CharField(max_length=100, blank=True, default='')
+    image_name = models.CharField(max_length=100, blank=True, default='')
 
 
 class ThumbnailImage(models.Model):
