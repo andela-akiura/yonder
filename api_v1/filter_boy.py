@@ -11,7 +11,7 @@ class Filter():
 
     @staticmethod
     def blur(photo, name):
-        """Return a blurred image."""
+        """Apply the BLUR filter."""
         image = Image.open(photo)
         image = image.filter(ImageFilter.BLUR)
         image.save(name)
@@ -19,7 +19,7 @@ class Filter():
 
     @staticmethod
     def smooth(photo, name):
-        """Return a smoothened image."""
+        """Apply the SMOOTH filter."""
         image = Image.open(photo)
         image = image.filter(ImageFilter.SMOOTH)
         image.save(name)
@@ -36,7 +36,7 @@ class Filter():
 
     @staticmethod
     def detail(photo, name):
-        """Enhance the detail on an image."""
+        """Apply the DETAIL filter."""
         image = Image.open(photo)
         image = image.filter(ImageFilter.DETAIL)
         image.save(name)
@@ -44,8 +44,16 @@ class Filter():
 
     @staticmethod
     def contour(photo, name):
-        """Enhance the detail on an image."""
+        """Apply the CONTOUR filter."""
         image = Image.open(photo)
         image = image.filter(ImageFilter.CONTOUR)
+        image.save(name)
+        return photo
+
+    @staticmethod
+    def emboss(photo, name):
+        """Apply the EMBOSS filter."""
+        image = Image.open(photo)
+        image = image.filter(ImageFilter.EMBOSS)
         image.save(name)
         return photo
