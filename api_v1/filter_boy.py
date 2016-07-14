@@ -82,7 +82,6 @@ class Filter():
         image.save(name)
         return photo
 
-
 filters = {
     'BLUR': Filter.blur,
     'CONTOUR', Filter.contour.
@@ -94,3 +93,6 @@ filters = {
     'GRAYSCALE', Filter.grayscale,
     'FIND_EDGES', Filter.find_edges
 }
+
+filters_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
+                 'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES']
