@@ -81,3 +81,16 @@ class Filter():
         image = image.filter(ImageFilter.EDGE_ENHANCE)
         image.save(name)
         return photo
+
+
+filters = {
+    'BLUR': Filter.blur,
+    'CONTOUR', Filter.contour.
+    'DETAIL', Filter.detail,
+    'EDGE_ENHANCE', Filter.edge_enhance,
+    'EMBOSS', Filter.emboss,
+    'SMOOTH', Filter.smooth,
+    'SHARPEN', Filter.sharpen,
+    'GRAYSCALE', Filter.grayscale,
+    'FIND_EDGES', Filter.find_edges
+}
