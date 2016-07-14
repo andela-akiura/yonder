@@ -84,14 +84,14 @@ class Filter():
 
 filters = {
     'BLUR': Filter.blur,
-    'CONTOUR', Filter.contour.
-    'DETAIL', Filter.detail,
-    'EDGE_ENHANCE', Filter.edge_enhance,
-    'EMBOSS', Filter.emboss,
-    'SMOOTH', Filter.smooth,
-    'SHARPEN', Filter.sharpen,
-    'GRAYSCALE', Filter.grayscale,
-    'FIND_EDGES', Filter.find_edges
+    'CONTOUR': Filter.contour,
+    'DETAIL': Filter.detail,
+    'EDGE_ENHANCE': Filter.edge_enhance,
+    'EMBOSS': Filter.emboss,
+    'SMOOTH': Filter.smooth,
+    'SHARPEN': Filter.sharpen,
+    'GRAYSCALE': Filter.grayscale,
+    'FIND_EDGES': Filter.find_edges
 }
 
 filters_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
