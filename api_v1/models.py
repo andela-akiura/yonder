@@ -34,5 +34,13 @@ class Image(models.Model):
 
 
 class ThumbnailImage(models.Model):
-    """Model for the filter thumbnails."""
+    """Model for the parent thumbnails."""
     thumbnail = models.ImageField(upload_to='images/thumbnails/', blank=False)
+
+class ThumbnailFilter(models.Model):
+    """Model for the filtered thumbnails."""
+    filtered = models.ImageField(upload_to='images/thumbnails/', blank=False)
+    filter_name = models.CharField(max_length=100, choices=FILTERS,
+                                   default='NONE')
+    original = models.ForeignKey(ThumbnailImage, on_delete=models.CASCADE,
+                                 related_name="filters")

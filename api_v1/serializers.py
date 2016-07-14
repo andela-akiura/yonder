@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from models import Image, ThumbnailImage
+from models import Image, ThumbnailImage, ThumbnailFilter
 
 
 
@@ -48,8 +48,21 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'save_changes', 'filter_name', 'original_image',
                   'filtered_image', 'created_by', 'folder_name', 'image_name')
 
+class ThumbnailFilterSerializer(serializers.ModelSerializer):
+    filtered = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=True)
+
+    filter_name = serializers.EmailField(max_length=100, required=True)
+
+    class Meta:
+        model = ThumbnailFilter
+        fields = ('filtered', 'filter_name', 'original')
+
 
 class ThumbnailImageSerializer(serializers.ModelSerializer):
+    filters = ThumbnailFilterSerializer(many=True, read_only=True)
     thumbnail = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
@@ -57,4 +70,4 @@ class ThumbnailImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ThumbnailImage
-        fields = ('id', 'thumbnail')
+        fields = ('id', 'thumbnail', 'filters')

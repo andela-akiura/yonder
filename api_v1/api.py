@@ -1,14 +1,13 @@
 """Endpoints to allow for user creation, image upload & filtering."""
 from django.contrib.auth.models import User
-from django.views.generic.base import TemplateView
-from django.core.files import File
-from models import Image, ThumbnailImage
+from models import Image, ThumbnailImage, ThumbnailFilter
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from serializers import UserSerializer, ImageSerializer
-from filter_boy import Filter
+from serializers import UserSerializer, ImageSerializer, \
+    ThumbnailImageSerializer
+from filter_boy import Filter, filters, filters_names
 import os
 
 
@@ -116,3 +115,43 @@ class ImageView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=serializer.data)
         serializer.is_valid()
         return Response(serializer.data)
+
+class ThumbnailView(viewsets.ModelViewSet):
+    queryset = ThumbnailImage.objects.all()
+    serializer_class = ThumbnailImageSerializer
+    permissions_classes = (AllowAny,)
+
+    def create(self, request):
+        """Upload image to generate thumbnails."""
+        data = request.data
+        thumbnail = data.get('thumbnail')
+        if thumbnail:
+            thumb_image = ThumbnailImage.objects.create(thumbnail=thumbnail)
+            # create filters
+            original = thumb_image.thumbnail
+
+            for filter_name in filters_names:
+                file_name, extension = ''.join(original.file.name.split('.')[0:-1]), \
+                    '.' + ''.join(original.file.name.split('.')[-1])
+                path = file_name + filter_name + extension
+                filters.get(filter_name)(original, path)
+                # import ipdb; ipdb.set_trace()
+                thumb_name = 'images/thumbnails/' + os.path.basename(path)
+                ThumbnailFilter.objects.create(filtered=thumb_name,
+                                               filter_name=filter_name,
+                                               original=thumb_image)
+                updated_thumb = ThumbnailImage.objects.get(pk=thumb_image.id)
+                serializer = ThumbnailImageSerializer(updated_thumb)
+                serializer = self.get_serializer(data=serializer.data)
+                serializer.is_valid()
+            # thumb_image.save()
+            # import ipdb; ipdb.set_trace()
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error':
+                             'Image file not uploaded.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+# #
+# 1. Have a child with filtered imagesself.
+# 2.
