@@ -1,5 +1,9 @@
 """Endpoints to allow for user creation, image upload & filtering."""
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage as storage
 from models import Image, ThumbnailImage, ThumbnailFilter
 from rest_framework import status
 from rest_framework import viewsets
@@ -7,8 +11,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from serializers import UserSerializer, ImageSerializer, \
     ThumbnailImageSerializer
-from filter_boy import Filter, filters, filters_names
+from filter_boy import Filter, filters, filter_names
+import boto
+import cStringIO
+import mimetypes
 import os
+
 
 
 class UserCreateView(viewsets.ModelViewSet):
@@ -129,13 +137,21 @@ class ThumbnailView(viewsets.ModelViewSet):
             thumb_image = ThumbnailImage.objects.create(thumbnail=thumbnail)
             # create filters
             original = thumb_image.thumbnail
-
-            for filter_name in filters_names:
-                file_name, extension = ''.join(original.file.name.split('.')[0:-1]), \
-                    '.' + ''.join(original.file.name.split('.')[-1])
+            for filter_name in filter_names:
+                file_name, extension = os.path.splitext(original.name)
                 path = file_name + filter_name + extension
-                filters.get(filter_name)(original, path)
-                # import ipdb; ipdb.set_trace()
+                old_thumb = storage.open(original.name, 'r')
+                temp_thumb = cStringIO.StringIO()
+                temp_thumb = filters.get(filter_name)(old_thumb, temp_thumb)
+                conn = boto.connect_s3(settings.AWS_S3_ACCESS_KEY_ID,
+                                       settings.AWS_S3_SECRET_ACCESS_KEY)
+                bucket = conn.get_bucket('pixlr321', validate=False)
+                k = bucket.new_key(path)
+                mime = mimetypes.guess_type(path)[0]
+                k.set_metadata('Content-Type', mime)
+                k.set_contents_from_string(temp_thumb.getvalue())
+                k.set_acl("public-read")
+                temp_thumb.close()
                 thumb_name = 'images/thumbnails/' + os.path.basename(path)
                 ThumbnailFilter.objects.create(filtered=thumb_name,
                                                filter_name=filter_name,
@@ -144,14 +160,9 @@ class ThumbnailView(viewsets.ModelViewSet):
                 serializer = ThumbnailImageSerializer(updated_thumb)
                 serializer = self.get_serializer(data=serializer.data)
                 serializer.is_valid()
-            # thumb_image.save()
-            # import ipdb; ipdb.set_trace()
             return Response(serializer.data,
                             status=status.HTTP_201_CREATED)
         else:
             return Response({'error':
                              'Image file not uploaded.'},
                             status=status.HTTP_400_BAD_REQUEST)
-# #
-# 1. Have a child with filtered imagesself.
-# 2.

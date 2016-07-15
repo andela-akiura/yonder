@@ -10,77 +10,78 @@ class Filter():
         pass
 
     @staticmethod
-    def blur(photo, name):
+    def blur(old_photo, new_photo):
         """Apply the BLUR filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.BLUR)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        # import ipdb; ipdb.set_trace()
+        return new_photo
 
     @staticmethod
-    def smooth(photo, name):
+    def smooth(old_photo, new_photo):
         """Apply the SMOOTH filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.SMOOTH)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def grayscale(photo, name):
+    def grayscale(old_photo, new_photo):
         """Return a black & white image."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         enhancer = ImageEnhance.Color(image)
         image = enhancer.enhance(0.0)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def detail(photo, name):
+    def detail(old_photo, new_photo):
         """Apply the DETAIL filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.DETAIL)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def contour(photo, name):
+    def contour(old_photo, new_photo):
         """Apply the CONTOUR filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.CONTOUR)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def emboss(photo, name):
+    def emboss(old_photo, new_photo):
         """Apply the EMBOSS filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.EMBOSS)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def sharpen(photo, name):
+    def sharpen(old_photo, new_photo):
         """Apply the SHARPEN filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.SHARPEN)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def find_edges(photo, name):
+    def find_edges(old_photo, new_photo):
         """Apply the FIND_EDGES filter."""
-        image = Image.open(photo)
+        image = Image.open(old_photo)
         image = image.filter(ImageFilter.FIND_EDGES)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
     @staticmethod
-    def edge_enhance(photo, name):
+    def edge_enhance(old_old_photo, new_photo):
         """Apply the EDGE_ENHANCE filter."""
-        image = Image.open(photo)
+        image = Image.open(old_old_photo)
         image = image.filter(ImageFilter.EDGE_ENHANCE)
-        image.save(name)
-        return photo
+        image.save(new_photo, "JPEG")
+        return new_photo
 
 filters = {
     'BLUR': Filter.blur,
@@ -94,5 +95,5 @@ filters = {
     'FIND_EDGES': Filter.find_edges
 }
 
-filters_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
-                 'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES']
+filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
+                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES']
