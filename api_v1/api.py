@@ -91,10 +91,7 @@ class ImageView(viewsets.ModelViewSet):
         path = name + 'f' + extension
 
         if int(save_changes) == 1:
-            image.original_image = filtered.name
-            os.remove(original.file.name)
-            os.rename(filtered.file.name, original.file.name)
-            image.original_image = original.name
+            image.original_image = image.filtered_image
             image.filtered_image = None
             image.filter_name = 'NONE'
         else:
