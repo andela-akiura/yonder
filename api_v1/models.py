@@ -22,8 +22,7 @@ class Image(models.Model):
     """Model for the Image file."""
 
     original_image = models.ImageField(upload_to='images/', blank=False)
-    filtered_image = models.ImageField(upload_to='images/filtered/',
-                                       blank=True, storage=storage)
+    filtered_image = models.ImageField(upload_to='images/', blank=True)
     created_by = models.CharField(max_length=100, blank=True, default='')
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)

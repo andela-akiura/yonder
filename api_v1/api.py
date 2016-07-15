@@ -1,5 +1,4 @@
 """Endpoints to allow for user creation, image upload & filtering."""
-from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -16,7 +15,7 @@ import boto
 import cStringIO
 import mimetypes
 import os
-
+from custom_storage import AmazonStorage as store
 
 
 class UserCreateView(viewsets.ModelViewSet):
@@ -88,9 +87,9 @@ class ImageView(viewsets.ModelViewSet):
         image = Image.objects.get(pk=pk)
         image.filter_name = filter_name
         original, filtered = image.original_image, image.filtered_image
-        name, extension = ''.join(original.file.name.split('.')[0:-1]), \
-            '.' + ''.join(original.file.name.split('.')[-1])
+        name, extension = os.path.splitext(original.name)
         path = name + 'f' + extension
+
         if int(save_changes) == 1:
             image.original_image = filtered.name
             os.remove(original.file.name)
@@ -99,26 +98,14 @@ class ImageView(viewsets.ModelViewSet):
             image.filtered_image = None
             image.filter_name = 'NONE'
         else:
-            if filter_name == 'BLUR':
-                photo = Filter.blur(image.original_image, path)
-            elif filter_name == 'SMOOTH':
-                photo = Filter.smooth(image.original_image, path)
-            elif filter_name == 'GRAYSCALE':
-                photo = Filter.grayscale(image.original_image, path)
-            elif filter_name == 'DETAIL':
-                photo = Filter.detail(image.original_image, path)
-            elif filter_name == 'CONTOUR':
-                photo = Filter.contour(image.original_image, path)
-            elif filter_name == 'EMBOSS':
-                photo = Filter.emboss(image.original_image, path)
-            elif filter_name == 'SHARPEN':
-                photo = Filter.sharpen(image.original_image, path)
-            elif filter_name == 'FIND_EDGES':
-                photo = Filter.find_edges(image.original_image, path)
-            elif filter_name == 'EDGE_ENHANCE':
-                photo = Filter.edge_enhance(image.original_image, path)
+            old_image = storage.open(original.name, 'r')
+            temp_image = cStringIO.StringIO()
+            temp_image = filters.get(filter_name)(old_image, temp_image)
+            store.upload_to_amazons3(path, temp_image)
+            temp_image.close()
+            old_image.close()
             image.filtered_image = 'images/' + os.path.basename(path)
-        image.save()
+            image.save()
         serializer = ImageSerializer(image)
         serializer = self.get_serializer(data=serializer.data)
         serializer.is_valid()
@@ -143,14 +130,7 @@ class ThumbnailView(viewsets.ModelViewSet):
                 old_thumb = storage.open(original.name, 'r')
                 temp_thumb = cStringIO.StringIO()
                 temp_thumb = filters.get(filter_name)(old_thumb, temp_thumb)
-                conn = boto.connect_s3(settings.AWS_S3_ACCESS_KEY_ID,
-                                       settings.AWS_S3_SECRET_ACCESS_KEY)
-                bucket = conn.get_bucket('pixlr321', validate=False)
-                k = bucket.new_key(path)
-                mime = mimetypes.guess_type(path)[0]
-                k.set_metadata('Content-Type', mime)
-                k.set_contents_from_string(temp_thumb.getvalue())
-                k.set_acl("public-read")
+                store.upload_to_amazons3(path, temp_thumb)
                 temp_thumb.close()
                 thumb_name = 'images/thumbnails/' + os.path.basename(path)
                 ThumbnailFilter.objects.create(filtered=thumb_name,
