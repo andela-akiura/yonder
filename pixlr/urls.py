@@ -21,12 +21,12 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', TemplateView.as_view(template_name='index.html')),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^api/v1/', include('api_v1.urls', namespace='images')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
