@@ -92,3 +92,5 @@ staticfiles/
 media/
 
 migrations/
+
+node_modules/
