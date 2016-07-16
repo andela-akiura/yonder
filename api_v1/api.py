@@ -1,6 +1,5 @@
 """Endpoints to allow for user creation, image upload & filtering."""
-from boto.s3.key import Key
-from django.conf import settings
+from custom_storage import AmazonStorage as store
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage as storage
 from models import Image, ThumbnailImage, ThumbnailFilter
@@ -10,15 +9,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from serializers import UserSerializer, ImageSerializer, \
     ThumbnailImageSerializer
-from filter_boy import Filter, filters, filter_names
-import boto
+from filter_boy import filters, filter_names
 import cStringIO
-import mimetypes
 import os
-from custom_storage import AmazonStorage as store
 
 
 class UserCreateView(viewsets.ModelViewSet):
+    """Create new users."""
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
