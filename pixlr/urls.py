@@ -22,7 +22,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^', TemplateView.as_view(template_name='index.html')),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^api/v1/', include('api_v1.urls', namespace='images')),
     url('', include('social.apps.django_app.urls', namespace='social')),
