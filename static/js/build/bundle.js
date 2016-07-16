@@ -90,7 +90,8 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _main2.default },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _login2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/home', component: _home2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/home', component: _home2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default })
 	  )
 	);
 
