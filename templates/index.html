@@ -10,6 +10,7 @@
   </head>
   <body>
     {% csrf_token %}
+    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Log In With Facebook</a>
     <div id="pixlr"> </div>
     <script src="{% static 'js/build/bundle.js'%}"></script>
   </body>

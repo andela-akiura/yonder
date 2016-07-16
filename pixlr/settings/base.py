@@ -81,11 +81,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend'
 )
 
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home/'
+SOCIAL_AUTH_LOGIN_URL = '/'
 SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('FB_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('FB_SECRET')
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home/'
-SOCIAL_AUTH_LOGIN_URL = '/'
 
 ROOT_URLCONF = 'pixlr.urls'
 
