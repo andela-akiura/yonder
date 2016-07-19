@@ -1,17 +1,30 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Pixlr</title>
-    <link href="{% static 'css/style.css'%}" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    {% csrf_token %}
-    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Log In With Facebook</a>
-    <div id="pixlr"> </div>
-    <script src="{% static 'js/build/bundle.js'%}"></script>
-  </body>
+
+<head>
+	<meta charset="utf-8">
+	<title>Pixlr</title>
+	<link href="{% static 'css/style.css'%}" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	{% csrf_token %}
+	<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true"></div>
+	<div id="pixlr"> </div>
+	<script src="{% static 'js/build/bundle.js'%}"></script>
+	<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1753656524846805";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+</body>
+
 </html>

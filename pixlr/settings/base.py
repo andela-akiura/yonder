@@ -29,7 +29,9 @@ PREREQ_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_docs',
+    'oauth2_provider',
     'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
     'storages',
 ]
 
@@ -50,6 +52,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',),
     'TEST_REQUEST_RENDERER_CLASSES': (
@@ -78,15 +82,17 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
     'social.backends.twitter.TwitterOAuth',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home'
 SOCIAL_AUTH_LOGIN_URL = '/'
-SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('FB_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('FB_SECRET')
 
+APPSECRET_PROOF = False
 
 ROOT_URLCONF = 'pixlr.urls'
 
