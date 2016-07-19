@@ -9,7 +9,7 @@ const LoginForm = () => (
     <div>
       <RaisedButton
         label="Login with facebook"
-        href="/login/facebook/?next=/"
+        href="/login/facebook/?next=/home"
       />
     </div>
   </MuiThemeProvider>

@@ -28338,7 +28338,7 @@
 	      null,
 	      _react2.default.createElement(_RaisedButton2.default, {
 	        label: 'Login with facebook',
-	        href: '/login/facebook/?next=/'
+	        href: '/login/facebook/?next=/home'
 	      })
 	    )
 	  );
