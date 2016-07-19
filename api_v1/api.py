@@ -59,7 +59,6 @@ class ImageView(viewsets.ModelViewSet):
     def create(self, request):
         """Upload Images."""
         data = request.data
-        import ipdb; ipdb.set_trace()
         folder_name, original_image = data.get('folder_name'), \
             data.get('original_image')
         created_by = request.user.username if request.user.username else ''
@@ -115,7 +114,6 @@ class ThumbnailView(viewsets.ModelViewSet):
         """Upload image to generate thumbnails."""
         data = request.data
         thumbnail = data.get('thumbnail')
-        import ipdb; ipdb.set_trace()
         if thumbnail:
             thumb_image = ThumbnailImage.objects.create(thumbnail=thumbnail)
             # create filters

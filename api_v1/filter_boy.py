@@ -15,7 +15,6 @@ class Filter():
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.BLUR)
         image.save(new_photo, "JPEG")
-        # import ipdb; ipdb.set_trace()
         return new_photo
 
     @staticmethod
