@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^api/v1/', include('api_v1.urls', namespace='images')),
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^', TemplateView.as_view(template_name='index.html')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

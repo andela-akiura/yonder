@@ -20543,15 +20543,19 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Home = function Home() {
-	  return _react2.default.createElement(
-	    _MuiThemeProvider2.default,
-	    { muiTheme: (0, _getMuiTheme2.default)() },
-	    _react2.default.createElement(
-	      'div',
-	      null,
-	      'Welcome to pixlr'
-	    )
-	  );
+	  if (localStorage.getItem('accessToken')) {
+	    return _react2.default.createElement(
+	      _MuiThemeProvider2.default,
+	      { muiTheme: (0, _getMuiTheme2.default)() },
+	      _react2.default.createElement(
+	        'div',
+	        null,
+	        'Welcome to pixlr'
+	      )
+	    );
+	  } else {
+	    window.location.href = '/';
+	  }
 	};
 
 	// LoginForm.propTypes = {
@@ -28334,8 +28338,8 @@
 	  localStorage.setItem('userId', resp.id);
 	  localStorage.setItem('profPic', resp.picture.data.url);
 	  localStorage.setItem('accessToken', resp.accessToken);
-	  // console.log('FB payload');
-	  // console.log(resp);
+	  localStorage.setItem('FB', window.FB);
+	  window.location.href = '/home';
 	};
 
 	var login = function login() {
@@ -28351,7 +28355,6 @@
 	          onSuccessfulLogin(me);
 	        });
 	      }
-	      console.log(payload);
 	    }, { scope: 'email,public_profile', return_scopes: true });
 	  });
 	};
