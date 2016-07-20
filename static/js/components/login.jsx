@@ -10,6 +10,8 @@ const onSuccessfulLogin = (resp) => {
   localStorage.setItem('userId', resp.id);
   localStorage.setItem('profPic', resp.picture.data.url);
   localStorage.setItem('accessToken', resp.accessToken);
+  localStorage.setItem('FB', window.FB);
+  window.location.href = '/home';
 }
 
 const login = () => {
