@@ -28315,10 +28315,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lightBaseTheme = __webpack_require__(292);
-
-	var _lightBaseTheme2 = _interopRequireDefault(_lightBaseTheme);
-
 	var _getMuiTheme = __webpack_require__(174);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
@@ -28329,6 +28325,37 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+
+
+	var onSuccessfulLogin = function onSuccessfulLogin(resp) {
+	  // save details in local storage
+	  localStorage.setItem('name', resp.name);
+	  localStorage.setItem('userId', resp.id);
+	  localStorage.setItem('profPic', resp.picture.data.url);
+	  localStorage.setItem('accessToken', resp.accessToken);
+	  // console.log('FB payload');
+	  // console.log(resp);
+	};
+
+	var login = function login() {
+	  // check login status and
+	  window.FB.getLoginStatus(function (response) {
+	    if (response.status === 'connected') {
+	      window.FB.logout();
+	    };
+	    window.FB.login(function (payload) {
+	      if (payload.authResponse) {
+	        window.FB.api('/me', { fields: 'name,picture' }, function (me) {
+	          Object.assign(me, payload.authResponse);
+	          onSuccessfulLogin(me);
+	        });
+	      }
+	      console.log(payload);
+	    }, { scope: 'email,public_profile', return_scopes: true });
+	  });
+	};
+
 	var LoginForm = function LoginForm() {
 	  return _react2.default.createElement(
 	    _MuiThemeProvider2.default,
@@ -28337,17 +28364,15 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(_RaisedButton2.default, {
-	        label: 'Login with facebook',
-	        href: '/login/facebook/?next=/home'
+	        label: 'Continue with facebook',
+	        onClick: login
 	      })
 	    )
 	  );
 	};
-
 	// LoginForm.propTypes = {
-	//   link: React.PropTypes.string.isRequired,
+	//   fb: React.PropTypes.object,
 	// };
-
 	exports.default = LoginForm;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/heavy_machinery/Dropbox/dev/class5/cps/pixlr/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "login.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
