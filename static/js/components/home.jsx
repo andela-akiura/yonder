@@ -52,27 +52,19 @@ const Home = () => {
       console.log(organizeImages(response, generateFolders(response)));
     });
     return (
-    <MuiThemeProvider muiTheme={getMuiTheme()}>
-      {/*<div className="row start-xs">
-        <Menu />
-        Welcome to pixlr
-      </div>*/}
-      <div>
-        <Menu />
-        <div className="row start-xs">
-          <div className="col-xs-3">
-            <SideBar images={images}/>
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <div>
+          <Menu />
+          <div className="row start-xs">
+            <div className="col-xs-3">
+              <SideBar images={images}/>
+            </div>
           </div>
         </div>
-      </div>
-  </MuiThemeProvider>)
-} else {
-  window.location.href = '/';
-}
+      </MuiThemeProvider>)
+    } else {
+      window.location.href = '/';
+    }
   };
-
-// LoginForm.propTypes = {
-//   link: React.PropTypes.string.isRequired,
-// };
 
 export default Home;
