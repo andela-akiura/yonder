@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Menu from './menu.jsx';
 import SideBar from './sideBar.jsx';
 import request from 'superagent';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+import LinearProgress from 'material-ui/LinearProgress';
 
 const generateFolders = (imageList) => (
   // return a list of unique folders
@@ -44,27 +46,55 @@ const fetchImage = () => {
 };
 
 
-const Home = () => {
-  let images = []
-  if (localStorage.getItem('accessToken')) {
-    fetchImage().then((response) => {
-      images = response;
-      console.log(organizeImages(response, generateFolders(response)));
-    });
-    return (
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <div>
-          <Menu />
-          <div className="row start-xs">
-            <div className="col-xs-3">
-              <SideBar images={images}/>
+class Home extends Component {
+  constructor() {
+    super();
+    this.state = {
+      folders: [],
+    }
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('accessToken')) {
+      fetchImage().then((response) => {
+        const folders = organizeImages(response, generateFolders(response));
+        this.setState({folders})
+      });
+      } else {
+        window.location.href = '/';
+      }
+  }
+
+  render() {
+
+    return this.state.folders.length > 0 ?
+      (
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <div>
+            <Menu />
+            <div className="row start-xs">
+              <div className="col-xs-3">
+
+                <SideBar folders={this.state.folders}/>
+              </div>
             </div>
           </div>
-        </div>
-      </MuiThemeProvider>)
-    } else {
-      window.location.href = '/';
-    }
-  };
+        </MuiThemeProvider>): (
+          <MuiThemeProvider muiTheme={getMuiTheme()}>
+            <div>
+              <Menu />
+              <div>
+                {/*<RefreshIndicator
+                  size={50}
+                  left={70}
+                  top={0}
+                  status="loading"
+                />*/}
+                <LinearProgress mode="indeterminate" />
+              </div>
+            </div>
+          </MuiThemeProvider>)
+  }
+};
 
 export default Home;
