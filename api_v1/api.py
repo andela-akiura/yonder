@@ -61,6 +61,7 @@ class ImageView(viewsets.ModelViewSet):
         data = request.data
         folder_name, original_image = data.get('folder_name'), \
             data.get('original_image')
+        import ipdb; ipdb.set_trace()
         created_by = request.user.username if request.user.username else ''
         if original_image:
             image = Image.objects.create(folder_name=folder_name,
