@@ -12,23 +12,22 @@ const onSuccessfulLogin = (resp) => {
   localStorage.setItem('accessToken', resp.accessToken);
   localStorage.setItem('FB', window.FB);
   window.location.href = '/home';
-}
+};
 
 const login = () => {
   // check login status and
   window.FB.getLoginStatus((response) => {
     if (response.status === 'connected') {
       window.FB.logout();
-    };
+    }
     window.FB.login((payload) => {
       if (payload.authResponse) {
         window.FB.api('/me', { fields: 'name,picture' }, (me) => {
           Object.assign(me, payload.authResponse);
           onSuccessfulLogin(me);
-  });
+        });
       }
-    }, {scope:'email,public_profile', return_scopes: true})
-
+    }, { scope: 'email,public_profile', return_scopes: true });
   });
 };
 
@@ -37,13 +36,6 @@ const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <div>
-        {/*<FacebookLogin
-          appId="1753656524846805"
-          textButton="Continue with Facebook"
-          autoLoad
-          fields="name,email,picture"
-          callback={responseFacebook}
-        />*/}
         <RaisedButton
           label="Continue with facebook"
           onClick={login}

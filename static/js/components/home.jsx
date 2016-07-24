@@ -4,7 +4,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Menu from './menu.jsx';
 import SideBar from './sideBar.jsx';
 import request from 'superagent';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
 import LinearProgress from 'material-ui/LinearProgress';
 
 const generateFolders = (imageList) => (
@@ -19,15 +18,15 @@ const generateFolders = (imageList) => (
 
 const organizeImages = (imageList, folderList) => {
   return folderList.map((folder) => (
-    {[folder]: imageList.filter((image) => {
+    { [folder]: imageList.filter((image) => {
       if (image.folder_name === folder) {
-        return image
-      } else if(image.folder_name === '' && folder === 'untitled') {
-        return image
+        return image;
+      } else if (image.folder_name === '' && folder === 'untitled') {
+        return image;
       }
-    })}
-  ))
-}
+    }) }
+  ));
+};
 
 const fetchImage = () => {
   // returns a Promise object.
@@ -51,22 +50,21 @@ class Home extends Component {
     super();
     this.state = {
       folders: [],
-    }
+    };
   }
 
   componentDidMount() {
     if (localStorage.getItem('accessToken')) {
       fetchImage().then((response) => {
         const folders = organizeImages(response, generateFolders(response));
-        this.setState({folders})
+        this.setState({ folders });
       });
-      } else {
-        window.location.href = '/';
-      }
+    } else {
+      window.location.href = '/';
+    }
   }
 
   render() {
-
     return this.state.folders.length > 0 ?
       (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -74,27 +72,35 @@ class Home extends Component {
             <Menu />
             <div className="row start-xs">
               <div className="col-xs-3">
-
                 <SideBar folders={this.state.folders}/>
               </div>
+              <div className="col-xs-9">
+                <div className="row">
+                  <img src="http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg" alt="Image" />
+                </div>
+                <br/>
+                <div className="row">
+                  <div className="col-xs">
+                    {['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
+                      'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'].map(() => (
+                        <img height="128" width="128" src="http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-        </MuiThemeProvider>): (
+        </MuiThemeProvider>) : (
           <MuiThemeProvider muiTheme={getMuiTheme()}>
             <div>
               <Menu />
               <div>
-                {/*<RefreshIndicator
-                  size={50}
-                  left={70}
-                  top={0}
-                  status="loading"
-                />*/}
                 <LinearProgress mode="indeterminate" />
               </div>
             </div>
-          </MuiThemeProvider>)
+          </MuiThemeProvider>);
   }
-};
+}
 
 export default Home;
