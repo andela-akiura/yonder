@@ -20655,6 +20655,27 @@
 	              'div',
 	              { className: 'col-xs-3' },
 	              _react2.default.createElement(_sideBar2.default, { folders: this.state.folders })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-9' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement('img', { src: 'http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg', alt: 'Image' })
+	              ),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-xs' },
+	                  ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS', 'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'].map(function () {
+	                    return _react2.default.createElement('img', { height: '128', width: '128', src: 'http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg' });
+	                  })
+	                )
+	              )
 	            )
 	          )
 	        )
@@ -31832,7 +31853,6 @@
 	    ),
 	    folders.map(function (folder) {
 	      return _react2.default.createElement(_List.ListItem, {
-	        autoGenerateNestedIndicator: true,
 	        primaryText: Object.keys(folder)[0],
 	        leftAvatar: _react2.default.createElement(_Avatar2.default, {
 	          color: _colors.blue300,
@@ -31841,7 +31861,6 @@
 	        key: folders.indexOf(folder),
 	        nestedItems: folder[Object.keys(folder)[0]].map(function (image) {
 	          return _react2.default.createElement(_List.ListItem, {
-	            autoGenerateNestedIndicator: true,
 	            key: folder[Object.keys(folder)[0]].indexOf(image),
 	            leftAvatar: _react2.default.createElement(_Avatar2.default, { src: image.original_image, size: 50 }),
 	            primaryText: image.image_name
