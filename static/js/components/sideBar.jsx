@@ -10,8 +10,8 @@ indigo900,
 
 
 const SideBar = (props) => {
-  const handleImageClick = (src) => {
-    props.updateCanvas(src);
+  const handleImageClick = (image) => {
+    props.updateCanvas(image);
   }
   return (
     <List className="box">
@@ -33,7 +33,7 @@ const SideBar = (props) => {
                 primaryText={<div src={image.original_image}>{image.image_name}</div>}
                 name="{image.image_name}"
                 src={image.original_image}
-                onTouchTap={handleImageClick.bind(null, image.original_image)}
+                onTouchTap={handleImageClick.bind(null, image)}
               />
             ))
           }
