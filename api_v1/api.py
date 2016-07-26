@@ -67,6 +67,16 @@ class ImageView(viewsets.ModelViewSet):
             image = Image.objects.create(folder_name=folder_name,
                                          original_image=original_image,
                                          created_by=created_by)
+            original = image.original_image
+            file_name, extension = os.path.splitext(original.name)
+            path = file_name + extension
+            large_img = storage.open(original.name, 'r')
+            small_img = cStringIO.StringIO()
+            small_img = filters.get('COMPRESS')(large_img, small_img)
+            store.upload_to_amazons3(path, small_img)
+            small_img.close()
+            image_name = 'images/' + os.path.basename(path)
+            image.original_image = image_name
             image.image_name = os.path.basename(image.original_image.file.name)
             image.save()
             return Response({'id': image.id,
