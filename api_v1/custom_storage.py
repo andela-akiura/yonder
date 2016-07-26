@@ -3,6 +3,7 @@
 from boto.s3.key import Key
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from storages.backends.s3boto import S3BotoStorage
 import boto
 import mimetypes
 
@@ -11,8 +12,17 @@ class CustomStorage(FileSystemStorage):
         return name
 
 
+class MediaStorage(S3BotoStorage):
+    """Override default storage to use cloudfront instead of Amazon S3 urls."""
+
+    def __init__(self, *args, **kwargs):
+        kwargs['custom_domain'] = settings.AWS_CLOUDFRONT_DOMAIN
+        super(MediaStorage, self).__init__(*args, **kwargs)
+
+
 class AmazonStorage:
     """Class with helper methods to manage file manipulation on AWS S3."""
+
     def __init__(self):
         pass
 
