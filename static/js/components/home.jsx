@@ -5,7 +5,35 @@ import Menu from './menu.jsx';
 import SideBar from './sideBar.jsx';
 import request from 'superagent';
 import LinearProgress from 'material-ui/LinearProgress';
+import { Card, CardMedia } from 'material-ui/Card';
+import {GridList, GridTile} from 'material-ui/GridList';
+import {Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn} from 'material-ui/Table';
 
+
+const style = {
+  home: {
+    // border: 'solid',
+  },
+  container: {
+    overflow: 'hidden',
+  },
+  gridList: {
+    width: '1700px',
+    overflow: 'auto',
+    overflowY: 'hidden',
+    marginBottom: 24,
+    flexWrap: 'nowrap',
+    padding: 5,
+  },
+  gridTile: {
+    width: '200px',
+  }
+};
 const generateFolders = (imageList) => (
   // return a list of unique folders
   Array.from(new Set(imageList.map((image) => {
@@ -28,11 +56,11 @@ const organizeImages = (imageList, folderList) => {
   ));
 };
 
-const fetchImage = () => {
+const fetchImages = (url) => {
   // returns a Promise object.
   return new Promise((resolve, reject) => {
     request
-    .get('/api/v1/images/')
+    .get(url)
     .set('Authorization', `Bearer facebook ${localStorage.getItem('accessToken')}`)
     .end((error, result) => {
       if (!error) {
@@ -50,43 +78,72 @@ class Home extends Component {
     super();
     this.state = {
       folders: [],
+      activeImage: '/static/images/placeholder.png',
+      thumbnails: [],
     };
+    this.updateCanvas = this.updateCanvas.bind(this);
   }
 
   componentDidMount() {
     if (localStorage.getItem('accessToken')) {
-      fetchImage().then((response) => {
+      fetchImages('/api/v1/images/').then((response) => {
         const folders = organizeImages(response, generateFolders(response));
         this.setState({ folders });
+      });
+      fetchImages('/api/v1/thumbnails/').then((response) => {
+        const thumbnails = response[0]['filters'];
+        console.log(thumbnails);
+        this.setState({ thumbnails });
       });
     } else {
       window.location.href = '/';
     }
   }
 
+  updateCanvas(src) {
+    if (src) {
+      this.setState({ activeImage: src });
+    }
+  }
+
   render() {
+    const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
+      'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
     return this.state.folders.length > 0 ?
       (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-          <div>
+          <div style={style.container}>
             <Menu />
             <div className="row start-xs">
               <div className="col-xs-3">
-                <SideBar folders={this.state.folders}/>
+                <SideBar
+                  style={style.home}
+                  folders={this.state.folders}
+                  updateCanvas={this.updateCanvas}
+                />
               </div>
-              <div className="col-xs-9">
-                <div className="row">
-                  <img src="http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg" alt="Image" />
-                </div>
-                <br/>
-                <div className="row">
-                  <div className="col-xs">
-                    {['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
-                      'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'].map(() => (
-                        <img height="128" width="128" src="http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg" />
-                    ))}
-                  </div>
-                </div>
+              <div className="col-xs-1"></div>
+              <div className="col-xs-7">
+                <Card>
+                  <CardMedia>
+                    <img width={100} src={this.state.activeImage} />
+                  </CardMedia>
+                </Card>
+                  <br/>
+              </div>
+              <div className="row">
+                <div className="col-xs-3"></div>
+                <GridList className="col-xs-7"  cols={names.length /2} style={style.gridList} >
+                  {thumbnails.map((thumb) => (
+                    <GridTile style={style.GridTile} title={thumb.filter_name} key={names.indexOf(name)}>
+                    <img
+                    height="128"
+                    width="128"
+                    src="http://nikonrumors.com/wp-content/uploads/2015/03/Nikon-D7200-sample-images.jpg" />
+                    </GridTile>
+                  ))}
+                  </GridList>
+                {/*</div>*/}
               </div>
 
             </div>
