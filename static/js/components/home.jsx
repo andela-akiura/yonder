@@ -13,12 +13,6 @@ const style = {
   container: {
     overflow: 'hidden',
   },
-  canvas: {
-    maxHeight: '600px',
-    backgroundSize: 'cover',
-    overflow: 'scroll',
-
-  },
   gridList: {
     width: '1700px',
     height: '140px',
@@ -31,9 +25,13 @@ const style = {
   gridTile: {
     width: '160px',
     height: '140px',
+    cursor: '-webkit-grab',
   },
   sideBar: {
     overflow: 'scroll',
+  },
+  image: {
+    objectFit: 'contain',
   },
 };
 
@@ -113,6 +111,12 @@ class Home extends Component {
     this.setState({ showFilters: !this.state.showFilters });
   }
 
+  applyFilters(filterName) {
+    event.preventDefault();
+    console.log(`${filterName} clicked my nigga`);
+
+  }
+
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
       'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
@@ -131,24 +135,22 @@ class Home extends Component {
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
                 <Card >
-                  <CardMedia style={style.canvas}>
-                    <img src={this.state.activeImage} />
+                  <CardMedia>
+                    <img height="500" width="800" style={style.image} src={this.state.activeImage} />
                   </CardMedia>
                 </Card>
-                  <br/>
                   <div className="row">
-
                   <Subheader>Filters</Subheader>
-                    {/*<div className="col-xs-1"></div>*/}
                     <GridList
                     cols={names.length / 2}
                     style={style.gridList}
                     >
                     {this.state.thumbnails.map((thumb) => (
                       <GridTile
-                      style={style.gridTile}
-                      title={thumb.filter_name}
-                      key={this.state.thumbnails.indexOf(thumb)}
+                        style={style.gridTile}
+                        title={thumb.filter_name}
+                        key={this.state.thumbnails.indexOf(thumb)}
+                        onClick={this.applyFilters.bind(null, thumb.filter_name)}
                       >
                       <img
                       height="128"
@@ -160,7 +162,6 @@ class Home extends Component {
                     </GridList>
                   </div>
               </div>
-
             </div>
           </div>
         </MuiThemeProvider>) : (

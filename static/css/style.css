@@ -11,11 +11,3 @@ html, body{margin:0px; padding:0px;}
 a:link {
     text-decoration: none;
 }
-
-img {
-  /*height: auto;*/
-  height: auto;
-  width: 100%;
-  max-height: MaxHeight;
-  max-width: MaxWidth;
-}

@@ -20580,12 +20580,6 @@
 	  container: {
 	    overflow: 'hidden'
 	  },
-	  canvas: {
-	    maxHeight: '600px',
-	    backgroundSize: 'cover',
-	    overflow: 'scroll'
-
-	  },
 	  gridList: {
 	    width: '1700px',
 	    height: '140px',
@@ -20597,10 +20591,14 @@
 	  },
 	  gridTile: {
 	    width: '160px',
-	    height: '140px'
+	    height: '140px',
+	    cursor: '-webkit-grab'
 	  },
 	  sideBar: {
 	    overflow: 'scroll'
+	  },
+	  image: {
+	    objectFit: 'contain'
 	  }
 	};
 
@@ -20691,6 +20689,12 @@
 	      this.setState({ showFilters: !this.state.showFilters });
 	    }
 	  }, {
+	    key: 'applyFilters',
+	    value: function applyFilters(filterName) {
+	      event.preventDefault();
+	      console.log(filterName + ' clicked my nigga');
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this3 = this;
@@ -20723,11 +20727,10 @@
 	                null,
 	                _react2.default.createElement(
 	                  _Card.CardMedia,
-	                  { style: style.canvas },
-	                  _react2.default.createElement('img', { src: this.state.activeImage })
+	                  null,
+	                  _react2.default.createElement('img', { height: '500', width: '800', style: style.image, src: this.state.activeImage })
 	                )
 	              ),
-	              _react2.default.createElement('br', null),
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'row' },
@@ -20748,7 +20751,8 @@
 	                      {
 	                        style: style.gridTile,
 	                        title: thumb.filter_name,
-	                        key: _this3.state.thumbnails.indexOf(thumb)
+	                        key: _this3.state.thumbnails.indexOf(thumb),
+	                        onClick: _this3.applyFilters.bind(null, thumb.filter_name)
 	                      },
 	                      _react2.default.createElement('img', {
 	                        height: '128',
