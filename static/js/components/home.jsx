@@ -73,6 +73,23 @@ const fetchImages = (url) => {
   });
 };
 
+const updateImages = (url, data={}) => {
+  // returns a Promise object.
+  return new Promise((resolve, reject) => {
+    request
+    .put(url)
+    .set('Authorization', `Bearer facebook ${localStorage.getItem('accessToken')}`)
+    .send(data)
+    .end((error, result) => {
+      if (!error) {
+        resolve(result.body);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
 
 class Home extends Component {
   constructor() {
@@ -82,9 +99,11 @@ class Home extends Component {
       activeImage: '/static/images/placeholder.png',
       thumbnails: [],
       showFilters: false,
+      currentImage: 1,
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
+    this.applyFilters = this.applyFilters.bind(this);
   }
 
   componentDidMount() {
@@ -102,9 +121,12 @@ class Home extends Component {
     }
   }
 
-  updateCanvas(src) {
-    if (src) {
-      this.setState({ activeImage: src });
+  updateCanvas(image) {
+    if (image) {
+      this.setState({
+        activeImage: image.original_image,
+        currentImage: image,
+      });
     }
   }
   toggleFilters() {
@@ -112,9 +134,16 @@ class Home extends Component {
   }
 
   applyFilters(filterName) {
-    event.preventDefault();
-    console.log(`${filterName} clicked my nigga`);
-
+    // make a put request to
+    updateImages(`http://${window.location.host}/api/v1/images/${this.state.currentImage.id}/`,
+      { filter_name: filterName, save_changes: 0 })
+      .then((response) => {
+        this.setState({ activeImage: response.filtered_image });
+        console.log(response);
+        // this.setState({ activeImage: '' }, () => {
+        //
+        // });
+      });
   }
 
   render() {

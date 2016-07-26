@@ -20639,6 +20639,21 @@
 	  });
 	};
 
+	var updateImages = function updateImages(url) {
+	  var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  // returns a Promise object.
+	  return new Promise(function (resolve, reject) {
+	    _superagent2.default.put(url).set('Authorization', 'Bearer facebook ' + localStorage.getItem('accessToken')).send(data).end(function (error, result) {
+	      if (!error) {
+	        resolve(result.body);
+	      } else {
+	        reject(error);
+	      }
+	    });
+	  });
+	};
+
 	var Home = function (_Component) {
 	  _inherits(Home, _Component);
 
@@ -20651,10 +20666,12 @@
 	      folders: [],
 	      activeImage: '/static/images/placeholder.png',
 	      thumbnails: [],
-	      showFilters: false
+	      showFilters: false,
+	      currentImage: 1
 	    };
 	    _this.updateCanvas = _this.updateCanvas.bind(_this);
 	    _this.toggleFilters = _this.toggleFilters.bind(_this);
+	    _this.applyFilters = _this.applyFilters.bind(_this);
 	    return _this;
 	  }
 
@@ -20678,9 +20695,12 @@
 	    }
 	  }, {
 	    key: 'updateCanvas',
-	    value: function updateCanvas(src) {
-	      if (src) {
-	        this.setState({ activeImage: src });
+	    value: function updateCanvas(image) {
+	      if (image) {
+	        this.setState({
+	          activeImage: image.original_image,
+	          currentImage: image
+	        });
 	      }
 	    }
 	  }, {
@@ -20691,13 +20711,21 @@
 	  }, {
 	    key: 'applyFilters',
 	    value: function applyFilters(filterName) {
-	      event.preventDefault();
-	      console.log(filterName + ' clicked my nigga');
+	      var _this3 = this;
+
+	      // make a put request to
+	      updateImages('http://' + window.location.host + '/api/v1/images/' + this.state.currentImage.id + '/', { filter_name: filterName, save_changes: 0 }).then(function (response) {
+	        _this3.setState({ activeImage: response.filtered_image });
+	        console.log(response);
+	        // this.setState({ activeImage: '' }, () => {
+	        //
+	        // });
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      var names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS', 'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
 	      return this.state.folders.length > 0 ? _react2.default.createElement(
@@ -20751,8 +20779,8 @@
 	                      {
 	                        style: style.gridTile,
 	                        title: thumb.filter_name,
-	                        key: _this3.state.thumbnails.indexOf(thumb),
-	                        onClick: _this3.applyFilters.bind(null, thumb.filter_name)
+	                        key: _this4.state.thumbnails.indexOf(thumb),
+	                        onClick: _this4.applyFilters.bind(null, thumb.filter_name)
 	                      },
 	                      _react2.default.createElement('img', {
 	                        height: '128',
@@ -31909,8 +31937,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SideBar = function SideBar(props) {
-	  var handleImageClick = function handleImageClick(src) {
-	    props.updateCanvas(src);
+	  var handleImageClick = function handleImageClick(image) {
+	    props.updateCanvas(image);
 	  };
 	  return _react2.default.createElement(
 	    _List.List,
@@ -31940,7 +31968,7 @@
 	            ),
 	            name: '{image.image_name}',
 	            src: image.original_image,
-	            onTouchTap: handleImageClick.bind(null, image.original_image)
+	            onTouchTap: handleImageClick.bind(null, image)
 	          });
 	        })
 	      });
