@@ -18,6 +18,13 @@ class Filter():
         return new_photo
 
     @staticmethod
+    def compress(old_photo, new_photo):
+        """Apply the BLUR filter."""
+        image = Image.open(old_photo)
+        image.save(new_photo, "JPEG", optimize=True, quality=40)
+        return new_photo
+
+    @staticmethod
     def smooth(old_photo, new_photo):
         """Apply the SMOOTH filter."""
         image = Image.open(old_photo)
@@ -91,8 +98,9 @@ filters = {
     'SMOOTH': Filter.smooth,
     'SHARPEN': Filter.sharpen,
     'GRAYSCALE': Filter.grayscale,
-    'FIND_EDGES': Filter.find_edges
+    'FIND_EDGES': Filter.find_edges,
+    'COMPRESS': Filter.compress,
 }
 
 filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
-                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES']
+                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES', 'COMPRESS']
