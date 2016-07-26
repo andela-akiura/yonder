@@ -13,5 +13,6 @@ a:link {
 }
 
 img {
-  max-height: 500px;
+  /*height: auto;*/
+  width: auto;
 }
