@@ -7,18 +7,21 @@ import request from 'superagent';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Card, CardMedia } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
-
+import Subheader from 'material-ui/Subheader';
 
 const style = {
   container: {
     overflow: 'hidden',
   },
   canvas: {
-    height: '50%',
-    // maxHeight: '350px',
+    maxHeight: '600px',
+    backgroundSize: 'cover',
+    overflow: 'scroll',
+
   },
   gridList: {
     width: '1700px',
+    height: '140px',
     overflow: 'auto',
     overflowY: 'hidden',
     marginBottom: 24,
@@ -27,6 +30,10 @@ const style = {
   },
   gridTile: {
     width: '160px',
+    height: '140px',
+  },
+  sideBar: {
+    overflow: 'scroll',
   },
 };
 
@@ -76,8 +83,10 @@ class Home extends Component {
       folders: [],
       activeImage: '/static/images/placeholder.png',
       thumbnails: [],
+      showFilters: false,
     };
     this.updateCanvas = this.updateCanvas.bind(this);
+    this.toggleFilters = this.toggleFilters.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +109,9 @@ class Home extends Component {
       this.setState({ activeImage: src });
     }
   }
+  toggleFilters() {
+    this.setState({ showFilters: !this.state.showFilters });
+  }
 
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
@@ -110,7 +122,7 @@ class Home extends Component {
           <div style={style.container}>
             <Menu />
             <div className="row start-xs">
-              <div className="col-xs-3">
+              <div style={style.sideBar} className="col-xs-3">
                 <SideBar
                   folders={this.state.folders}
                   updateCanvas={this.updateCanvas}
@@ -118,33 +130,35 @@ class Home extends Component {
               </div>
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
-                <Card style={style.canvas}>
-                  <CardMedia expandable={false}>
+                <Card >
+                  <CardMedia style={style.canvas}>
                     <img src={this.state.activeImage} />
                   </CardMedia>
                 </Card>
                   <br/>
-              </div>
-              <div className="row">
-                <div className="col-xs-3"></div>
-                <GridList className="col-xs-7"
-                  cols={names.length / 2}
-                  style={style.gridList}
-                >
-                  {this.state.thumbnails.map((thumb) => (
-                    <GridTile
+                  <div className="row">
+
+                  <Subheader>Filters</Subheader>
+                    {/*<div className="col-xs-1"></div>*/}
+                    <GridList
+                    cols={names.length / 2}
+                    style={style.gridList}
+                    >
+                    {this.state.thumbnails.map((thumb) => (
+                      <GridTile
                       style={style.gridTile}
                       title={thumb.filter_name}
                       key={this.state.thumbnails.indexOf(thumb)}
-                    >
-                    <img
+                      >
+                      <img
                       height="128"
                       width="128"
                       src={thumb.filtered}
-                    />
-                    </GridTile>
-                  ))}
-                  </GridList>
+                      />
+                      </GridTile>
+                    ))}
+                    </GridList>
+                  </div>
               </div>
 
             </div>

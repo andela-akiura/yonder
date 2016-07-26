@@ -14,5 +14,8 @@ a:link {
 
 img {
   /*height: auto;*/
-  width: auto;
+  height: auto;
+  width: 100%;
+  max-height: MaxHeight;
+  max-width: MaxWidth;
 }
