@@ -3,6 +3,7 @@ from custom_storage import AmazonStorage as store
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage as storage
 from models import Image, ThumbnailImage, ThumbnailFilter
+from random import randint
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -85,7 +86,7 @@ class ImageView(viewsets.ModelViewSet):
         image.filter_name = filter_name
         original, filtered = image.original_image, image.filtered_image
         name, extension = os.path.splitext(original.name)
-        path = name + 'f' + extension
+        path = name + str(randint(0, 9)) + extension
 
         if int(save_changes) == 1:
             image.original_image = image.filtered_image
