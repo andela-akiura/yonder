@@ -55,7 +55,7 @@ class ImageView(viewsets.ModelViewSet):
 
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         return [image for image in Image.objects.all() if image.created_by ==
