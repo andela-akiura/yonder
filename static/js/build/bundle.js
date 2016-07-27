@@ -20582,23 +20582,27 @@
 	  },
 	  gridList: {
 	    width: '1700px',
-	    height: '140px',
+	    height: '155px',
 	    overflow: 'auto',
 	    overflowY: 'hidden',
 	    marginBottom: 24,
-	    flexWrap: 'nowrap',
-	    padding: 5
+	    flexWrap: 'nowrap'
 	  },
 	  gridTile: {
-	    width: '160px',
-	    height: '140px',
-	    cursor: '-webkit-grab'
+	    marginLeft: 10,
+	    height: '120px',
+	    cursor: '-webkit-grab',
+	    position: 'relative',
+	    overflow: 'hidden'
 	  },
 	  sideBar: {
 	    overflow: 'scroll'
 	  },
 	  image: {
 	    objectFit: 'contain'
+	  },
+	  filterName: {
+	    fontSize: 13.5
 	  }
 	};
 
@@ -20777,14 +20781,21 @@
 	                    return _react2.default.createElement(
 	                      _GridList.GridTile,
 	                      {
+	                        className: 'grow',
+	                        tabIndex: _this4.state.thumbnails.indexOf(thumb),
 	                        style: style.gridTile,
-	                        title: thumb.filter_name,
+	                        title: _react2.default.createElement(
+	                          'p',
+	                          { style: style.filterName },
+	                          thumb.filter_name
+	                        ),
 	                        key: _this4.state.thumbnails.indexOf(thumb),
 	                        onClick: _this4.applyFilters.bind(null, thumb.filter_name)
 	                      },
 	                      _react2.default.createElement('img', {
-	                        height: '128',
-	                        width: '128',
+	                        className: 'filter',
+	                        height: '70',
+	                        width: '120',
 	                        src: thumb.filtered
 	                      })
 	                    );
