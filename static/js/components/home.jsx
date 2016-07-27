@@ -15,23 +15,28 @@ const style = {
   },
   gridList: {
     width: '1700px',
-    height: '140px',
+    height: '155px',
     overflow: 'auto',
     overflowY: 'hidden',
     marginBottom: 24,
     flexWrap: 'nowrap',
-    padding: 5,
+    // padding: 5,
   },
   gridTile: {
-    width: '160px',
-    height: '140px',
+    marginLeft: 10,
+    height: '120px',
     cursor: '-webkit-grab',
+    position: 'relative',
+    overflow: 'hidden',
   },
   sideBar: {
     overflow: 'scroll',
   },
   image: {
     objectFit: 'contain',
+  },
+  filterName: {
+    fontSize: 13.5,
   },
 };
 
@@ -176,14 +181,17 @@ class Home extends Component {
                     >
                     {this.state.thumbnails.map((thumb) => (
                       <GridTile
+                        className="grow"
+                        tabIndex={this.state.thumbnails.indexOf(thumb)}
                         style={style.gridTile}
-                        title={thumb.filter_name}
+                        title={<p style={style.filterName}>{thumb.filter_name}</p>}
                         key={this.state.thumbnails.indexOf(thumb)}
                         onClick={this.applyFilters.bind(null, thumb.filter_name)}
                       >
                       <img
-                      height="128"
-                      width="128"
+                      className="filter"
+                      height="70"
+                      width="120"
                       src={thumb.filtered}
                       />
                       </GridTile>
