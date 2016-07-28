@@ -3,10 +3,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Menu from './menu.jsx';
 import SideBar from './sideBar.jsx';
+import Thumbnail from './thumbnail.jsx';
 import request from 'superagent';
 import LinearProgress from 'material-ui/LinearProgress';
 import { Card, CardMedia } from 'material-ui/Card';
-import { GridList, GridTile } from 'material-ui/GridList';
+import { GridList } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 
 const style = {
@@ -78,7 +79,7 @@ const fetchImages = (url) => {
   });
 };
 
-const updateImages = (url, data={}) => {
+const updateImages = (url, data = {}) => {
   // returns a Promise object.
   return new Promise((resolve, reject) => {
     request
@@ -144,10 +145,6 @@ class Home extends Component {
       { filter_name: filterName, save_changes: 0 })
       .then((response) => {
         this.setState({ activeImage: response.filtered_image });
-        console.log(response);
-        // this.setState({ activeImage: '' }, () => {
-        //
-        // });
       });
   }
 
@@ -170,31 +167,29 @@ class Home extends Component {
               <div className="col-xs-7">
                 <Card >
                   <CardMedia>
-                    <img height="500" width="800" style={style.image} src={this.state.activeImage} />
+                    <img
+                      height="500"
+                      width="800"
+                      style={style.image}
+                      src={this.state.activeImage}
+                    />
                   </CardMedia>
                 </Card>
                   <div className="row">
                   <Subheader>Filters</Subheader>
                     <GridList
-                    cols={names.length / 2}
-                    style={style.gridList}
+                      cols={names.length / 2}
+                      style={style.gridList}
                     >
-                    {this.state.thumbnails.map((thumb) => (
-                      <GridTile
-                        className="grow"
-                        tabIndex={this.state.thumbnails.indexOf(thumb)}
-                        style={style.gridTile}
-                        title={<p style={style.filterName}>{thumb.filter_name}</p>}
-                        key={this.state.thumbnails.indexOf(thumb)}
-                        onClick={this.applyFilters.bind(null, thumb.filter_name)}
-                      >
-                      <img
-                      className="filter"
-                      height="70"
-                      width="120"
-                      src={thumb.filtered}
+                    {this.state.thumbnails.map((thumb, index) => (
+                      <Thumbnail
+                        thumbnail={thumb}
+                        id={index}
+                        key={index}
+                        tabIndex={thumb.id}
+                        styling={style}
+                        _onClick={this.applyFilters}
                       />
-                      </GridTile>
                     ))}
                     </GridList>
                   </div>
