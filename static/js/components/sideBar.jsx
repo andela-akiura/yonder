@@ -12,7 +12,7 @@ indigo900,
 const SideBar = (props) => {
   const handleImageClick = (image) => {
     props.updateCanvas(image);
-  }
+  };
   return (
     <List className="box">
       <Subheader>Uploaded photos</Subheader>
@@ -43,7 +43,7 @@ const SideBar = (props) => {
   );
 };
 
-SideBar.PropTypes = {
+SideBar.propTypes = {
   folders: React.PropTypes.array,
   updateCanvas: React.PropTypes.function,
 };
