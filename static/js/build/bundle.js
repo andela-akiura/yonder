@@ -20550,6 +20550,10 @@
 
 	var _sideBar2 = _interopRequireDefault(_sideBar);
 
+	var _thumbnail = __webpack_require__(487);
+
+	var _thumbnail2 = _interopRequireDefault(_thumbnail);
+
 	var _superagent = __webpack_require__(392);
 
 	var _superagent2 = _interopRequireDefault(_superagent);
@@ -20720,10 +20724,6 @@
 	      // make a put request to
 	      updateImages('http://' + window.location.host + '/api/v1/images/' + this.state.currentImage.id + '/', { filter_name: filterName, save_changes: 0 }).then(function (response) {
 	        _this3.setState({ activeImage: response.filtered_image });
-	        console.log(response);
-	        // this.setState({ activeImage: '' }, () => {
-	        //
-	        // });
 	      });
 	    }
 	  }, {
@@ -20760,7 +20760,12 @@
 	                _react2.default.createElement(
 	                  _Card.CardMedia,
 	                  null,
-	                  _react2.default.createElement('img', { height: '500', width: '800', style: style.image, src: this.state.activeImage })
+	                  _react2.default.createElement('img', {
+	                    height: '500',
+	                    width: '800',
+	                    style: style.image,
+	                    src: this.state.activeImage
+	                  })
 	                )
 	              ),
 	              _react2.default.createElement(
@@ -20777,28 +20782,15 @@
 	                    cols: names.length / 2,
 	                    style: style.gridList
 	                  },
-	                  this.state.thumbnails.map(function (thumb) {
-	                    return _react2.default.createElement(
-	                      _GridList.GridTile,
-	                      {
-	                        className: 'grow',
-	                        tabIndex: _this4.state.thumbnails.indexOf(thumb),
-	                        style: style.gridTile,
-	                        title: _react2.default.createElement(
-	                          'p',
-	                          { style: style.filterName },
-	                          thumb.filter_name
-	                        ),
-	                        key: _this4.state.thumbnails.indexOf(thumb),
-	                        onClick: _this4.applyFilters.bind(null, thumb.filter_name)
-	                      },
-	                      _react2.default.createElement('img', {
-	                        className: 'filter',
-	                        height: '70',
-	                        width: '120',
-	                        src: thumb.filtered
-	                      })
-	                    );
+	                  this.state.thumbnails.map(function (thumb, index) {
+	                    return _react2.default.createElement(_thumbnail2.default, {
+	                      thumbnail: thumb,
+	                      id: index,
+	                      key: index,
+	                      tabIndex: thumb.id,
+	                      styling: style,
+	                      _onClick: _this4.applyFilters
+	                    });
 	                  })
 	                )
 	              )
@@ -31968,9 +31960,9 @@
 	          icon: _react2.default.createElement(_folder2.default, null)
 	        }),
 	        key: props.folders.indexOf(folder),
-	        nestedItems: folder[Object.keys(folder)[0]].map(function (image) {
+	        nestedItems: folder[Object.keys(folder)[0]].map(function (image, index) {
 	          return _react2.default.createElement(_List.ListItem, {
-	            key: folder[Object.keys(folder)[0]].indexOf(image),
+	            key: index,
 	            leftAvatar: _react2.default.createElement(_Avatar2.default, { src: image.original_image, size: 50 }),
 	            primaryText: _react2.default.createElement(
 	              'div',
@@ -31987,9 +31979,9 @@
 	  );
 	};
 
-	SideBar.PropTypes = {
+	SideBar.propTypes = {
 	  folders: _react2.default.PropTypes.array,
-	  updateCanvas: _react2.default.PropTypes.function
+	  updateCanvas: _react2.default.PropTypes.func
 	};
 
 	exports.default = SideBar;
@@ -44646,6 +44638,69 @@
 	};
 
 	module.exports = keyOf;
+
+/***/ },
+/* 487 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/heavy_machinery/Dropbox/dev/class5/cps/pixlr/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/heavy_machinery/Dropbox/dev/class5/cps/pixlr/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _GridList = __webpack_require__(411);
+
+	var _react = __webpack_require__(168);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Thumbnail = function Thumbnail(_ref) {
+	  var thumbnail = _ref.thumbnail;
+	  var styling = _ref.styling;
+	  var _onClick = _ref._onClick;
+	  var id = _ref.id;
+
+	  var onFilterClick = function onFilterClick() {
+	    _onClick(thumbnail.filter_name);
+	  };
+
+	  return _react2.default.createElement(
+	    _GridList.GridTile,
+	    {
+	      className: 'grow',
+	      tabIndex: id,
+	      style: styling.gridTile,
+	      title: _react2.default.createElement(
+	        'p',
+	        { style: styling.filterName },
+	        thumbnail.filter_name
+	      ),
+	      onClick: onFilterClick
+	    },
+	    _react2.default.createElement('img', {
+	      className: 'filter',
+	      height: '70',
+	      width: '120',
+	      src: thumbnail.filtered
+	    })
+	  );
+	};
+
+	Thumbnail.propTypes = {
+	  thumbnail: _react2.default.PropTypes.object,
+	  style: _react2.default.PropTypes.object,
+	  _onClick: _react2.default.PropTypes.func,
+	  id: _react2.default.PropTypes.number
+	};
+
+	exports.default = Thumbnail;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/heavy_machinery/Dropbox/dev/class5/cps/pixlr/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "thumbnail.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);

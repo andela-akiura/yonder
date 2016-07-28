@@ -26,9 +26,9 @@ const SideBar = (props) => {
           />}
           key={props.folders.indexOf(folder)}
           nestedItems={
-            folder[Object.keys(folder)[0]].map((image) => (
+            folder[Object.keys(folder)[0]].map((image, index) => (
               <ListItem
-                key={folder[Object.keys(folder)[0]].indexOf(image)}
+                key={index}
                 leftAvatar={<Avatar src={image.original_image} size={50}/>}
                 primaryText={<div src={image.original_image}>{image.image_name}</div>}
                 name="{image.image_name}"
@@ -45,7 +45,7 @@ const SideBar = (props) => {
 
 SideBar.propTypes = {
   folders: React.PropTypes.array,
-  updateCanvas: React.PropTypes.function,
+  updateCanvas: React.PropTypes.func,
 };
 
 export default SideBar;
