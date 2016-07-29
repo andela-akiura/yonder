@@ -1,1 +1,1 @@
-web: python manage.py migrate --settings=pixlr.settings.prod; gunicorn pixlr.wsgi --pythonpath=pixlr --log-file -
+web: python manage.py migrate --settings=khali.settings.prod; gunicorn khali.wsgi --pythonpath=khali --log-file -

@@ -32,7 +32,7 @@ const logout = () => {
 const Menu = () => (
   <Toolbar className="toolbar" style={style.menuBar}>
     <ToolbarGroup firstChild>
-      <ToolbarTitle style={style.logout} text="Pixlr"/>
+      <ToolbarTitle style={style.logout} text="khali"/>
     </ToolbarGroup>
     <ToolbarGroup lastChild>
       <div style={style.greeting}>
