@@ -1,2 +1,2 @@
-# pixlr
+# khali
 A photo editing application.

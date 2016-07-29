@@ -16,4 +16,4 @@ const routes = (
     </Route>
   </Router>);
 
-render(routes, document.getElementById('pixlr'));
+render(routes, document.getElementById('khali'));
