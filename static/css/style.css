@@ -19,10 +19,15 @@ a:link {
 .login-button {
   display: flex;
   margin: 300px auto;
-  width: 212px;
+  width: 250px;
   height: 36px;
+  color: #eef1f8
 }
 
 .grow { transition: all .2s ease-in-out; }
 
 .grow:hover { transform: scale(1.1); }
+
+.social {
+  color: #4468b3 !important;
+}
