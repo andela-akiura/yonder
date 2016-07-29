@@ -1,8 +1,8 @@
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
-// import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 
 const onSuccessfulLogin = (resp) => {
   // save details in local storage
@@ -35,7 +35,7 @@ const login = () => {
 const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
-      <div>
+      <div className="login-button">
         <RaisedButton
           label="Continue with facebook"
           onClick={login}

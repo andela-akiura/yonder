@@ -11,10 +11,18 @@ html, body{margin:0px; padding:0px;}
 a:link {
     text-decoration: none;
 }
+
 .filter:visited {
-  /*background-color: #4493cc;*/
-   box-shadow: inset 0 0 0 140px #53a7ea;
+  box-shadow: inset 0 0 0 140px #53a7ea;
+}
+
+.login-button {
+  display: flex;
+  margin: 300px auto;
+  width: 212px;
+  height: 36px;
 }
 
 .grow { transition: all .2s ease-in-out; }
+
 .grow:hover { transform: scale(1.1); }
