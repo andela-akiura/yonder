@@ -33465,6 +33465,7 @@
 	};
 	exports.default = FontIcon;
 
+
 /***/ },
 /* 375 */
 /***/ function(module, exports, __webpack_require__) {
@@ -38193,7 +38194,17 @@
 
 	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
 
+	var _FontIcon = __webpack_require__(373);
+
+	var _FontIcon2 = _interopRequireDefault(_FontIcon);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var style = {
+	  fbIcon: {
+	    color: '#4468b3'
+	  }
+	};
 
 	var onSuccessfulLogin = function onSuccessfulLogin(resp) {
 	  // save details in local storage
@@ -38231,14 +38242,14 @@
 	      { className: 'login-button' },
 	      _react2.default.createElement(_RaisedButton2.default, {
 	        label: 'Continue with facebook',
-	        onClick: login
+	        onClick: login,
+	        labelStyle: style.fbIcon,
+	        icon: _react2.default.createElement(_FontIcon2.default, { className: 'fa fa-facebook-official social' })
 	      })
 	    )
 	  );
 	};
-	// LoginForm.propTypes = {
-	//   fb: React.PropTypes.object,
-	// };
+
 	exports.default = LoginForm;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/heavy_machinery/Dropbox/dev/class5/cps/pixlr/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "login.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }

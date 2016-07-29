@@ -2,7 +2,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import FontIcon from 'material-ui/FontIcon';
 
+const style = {
+  fbIcon: {
+    color: '#4468b3',
+  },
+};
 
 const onSuccessfulLogin = (resp) => {
   // save details in local storage
@@ -39,12 +45,12 @@ const LoginForm = () => {
         <RaisedButton
           label="Continue with facebook"
           onClick={login}
+          labelStyle={style.fbIcon}
+          icon={<FontIcon className="fa fa-facebook-official social" />}
         />
       </div>
     </MuiThemeProvider>
   );
 };
-// LoginForm.propTypes = {
-//   fb: React.PropTypes.object,
-// };
+
 export default LoginForm;
