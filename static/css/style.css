@@ -21,7 +21,7 @@ a:link {
   margin: 300px auto;
   width: 250px;
   height: 36px;
-  color: #eef1f8
+  color: #eef1f8;
 }
 
 .grow { transition: all .2s ease-in-out; }
