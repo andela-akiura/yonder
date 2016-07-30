@@ -8,6 +8,11 @@ const style = {
   fbIcon: {
     color: '#4468b3',
   },
+  background: {
+    background: 'url("/static/images/perfect_shot.jpg")no-repeat center fixed',
+    height: '100vh',
+    overflow: 'auto',
+  },
 };
 
 const onSuccessfulLogin = (resp) => {
@@ -41,6 +46,7 @@ const login = () => {
 const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
+    <div style={style.background}>
       <div className="login-button">
         <RaisedButton
           label="Continue with facebook"
@@ -49,6 +55,7 @@ const LoginForm = () => {
           icon={<FontIcon className="fa fa-facebook-official social" />}
         />
       </div>
+    </div>
     </MuiThemeProvider>
   );
 };
