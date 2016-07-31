@@ -38206,8 +38206,24 @@
 	  },
 	  background: {
 	    background: 'url("/static/images/perfect_shot.jpg")no-repeat center fixed',
-	    height: '100vh',
-	    overflow: 'auto'
+	    overflow: 'hidden',
+	    height: '100vh'
+
+	  },
+	  appDescription: {
+	    margin: '150px auto',
+	    width: '500px',
+	    height: '100px'
+	  },
+	  appName: {
+	    fontFamily: 'Frijole',
+	    fontSize: '70px',
+	    color: '#E57373'
+	  },
+	  appTagLine: {
+	    fontFamily: 'Shadows Into Light',
+	    fontSize: '30px',
+	    color: '#E57373'
 	  }
 	};
 
@@ -38245,6 +38261,20 @@
 	    _react2.default.createElement(
 	      'div',
 	      { style: style.background },
+	      _react2.default.createElement(
+	        'div',
+	        { style: style.appDescription },
+	        _react2.default.createElement(
+	          'p',
+	          { style: style.appName },
+	          'KHALI.'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          { style: style.appTagLine },
+	          'Khali helps you upload, edit and share your favorite photos.'
+	        )
+	      ),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'login-button' },

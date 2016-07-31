@@ -10,8 +10,24 @@ const style = {
   },
   background: {
     background: 'url("/static/images/perfect_shot.jpg")no-repeat center fixed',
+    overflow: 'hidden',
     height: '100vh',
-    overflow: 'auto',
+
+  },
+  appDescription: {
+    margin: '150px auto',
+    width: '500px',
+    height: '100px',
+  },
+  appName: {
+    fontFamily: 'Frijole',
+    fontSize: '70px',
+    color: '#E57373',
+  },
+  appTagLine: {
+    fontFamily: 'Shadows Into Light',
+    fontSize: '30px',
+    color: '#E57373',
   },
 };
 
@@ -47,6 +63,14 @@ const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
     <div style={style.background}>
+    <div style={style.appDescription}>
+      <p style={style.appName}>
+      KHALI.
+      </p>
+      <p style={style.appTagLine}>
+      Khali helps you upload, edit and share your favorite photos.
+      </p>
+    </div>
       <div className="login-button">
         <RaisedButton
           label="Continue with facebook"
