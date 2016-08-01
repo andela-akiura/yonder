@@ -3,6 +3,7 @@ from custom_storage import AmazonStorage as store
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage as storage
 from models import Image, ThumbnailImage, ThumbnailFilter
+from permissions import IsOwner
 from random import randint
 from rest_framework import status
 from rest_framework import viewsets
@@ -55,7 +56,7 @@ class ImageView(viewsets.ModelViewSet):
 
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, IsOwner,)
 
     def get_queryset(self):
         return [image for image in Image.objects.all() if image.created_by ==
