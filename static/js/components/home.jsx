@@ -9,6 +9,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import { Card, CardMedia } from 'material-ui/Card';
 import { GridList } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const style = {
   container: {
@@ -21,7 +22,6 @@ const style = {
     overflowY: 'hidden',
     marginBottom: 24,
     flexWrap: 'nowrap',
-    // padding: 5,
   },
   gridTile: {
     marginLeft: 10,
@@ -38,6 +38,14 @@ const style = {
   },
   filterName: {
     fontSize: 13.5,
+  },
+  refresh: {
+    display: 'flex',
+    margin: '300px 860px',
+    width: '40px',
+    height: '40px',
+    position: 'absolute',
+    zIndex: '10',
   },
 };
 
@@ -106,6 +114,7 @@ class Home extends Component {
       thumbnails: [],
       showFilters: false,
       currentImage: 1,
+      filterStatus: 'hide',
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
@@ -140,11 +149,16 @@ class Home extends Component {
   }
 
   applyFilters(filterName) {
+    // show progress indicator
+    this.setState({ filterStatus: 'loading' });
     // make a put request to
     updateImages(`http://${window.location.host}/api/v1/images/${this.state.currentImage.id}/`,
       { filter_name: filterName, save_changes: 0 })
       .then((response) => {
-        this.setState({ activeImage: response.filtered_image });
+        this.setState({
+          activeImage: response.filtered_image,
+          filterStatus: 'hide',
+        });
       });
   }
 
@@ -165,6 +179,13 @@ class Home extends Component {
               </div>
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
+              <RefreshIndicator
+                size={40}
+                left={10}
+                top={0}
+                status={this.state.filterStatus}
+                style={style.refresh}
+              />
                 <Card >
                   <CardMedia>
                     <img
