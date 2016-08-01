@@ -130,6 +130,7 @@ class Home extends Component {
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
+    this.shareImage = this.shareImage.bind(this);
   }
 
   componentDidMount() {
@@ -171,6 +172,17 @@ class Home extends Component {
           filterStatus: 'hide',
         });
       });
+  }
+
+  shareImage() {
+    event.preventDefault();
+    window.FB.ui({
+      method: 'share',
+      href: this.state.activeImage,
+      picture: this.state.activeImage,
+      display: 'popup',
+      caption: 'Awesome photo',
+    }, (response) => (response));
   }
 
   render() {
@@ -219,8 +231,8 @@ class Home extends Component {
                       labelColor="#eef1f8"
                       backgroundColor="#4468b3"
                       style={style.button}
-                      href={this.state.activeImage}
                       label="Share"
+                      onClick={this.shareImage}
                       icon={<FontIcon className="fa fa-facebook-official"/>}
                     />
                     <RaisedButton

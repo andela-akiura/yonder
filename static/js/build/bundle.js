@@ -20710,6 +20710,7 @@
 	    _this.updateCanvas = _this.updateCanvas.bind(_this);
 	    _this.toggleFilters = _this.toggleFilters.bind(_this);
 	    _this.applyFilters = _this.applyFilters.bind(_this);
+	    _this.shareImage = _this.shareImage.bind(_this);
 	    return _this;
 	  }
 
@@ -20759,6 +20760,20 @@
 	          activeImage: response.filtered_image,
 	          filterStatus: 'hide'
 	        });
+	      });
+	    }
+	  }, {
+	    key: 'shareImage',
+	    value: function shareImage() {
+	      event.preventDefault();
+	      window.FB.ui({
+	        method: 'share',
+	        href: this.state.activeImage,
+	        picture: this.state.activeImage,
+	        display: 'popup',
+	        caption: 'Awesome photo'
+	      }, function (response) {
+	        return response;
 	      });
 	    }
 	  }, {
@@ -20824,8 +20839,8 @@
 	                    labelColor: '#eef1f8',
 	                    backgroundColor: '#4468b3',
 	                    style: style.button,
-	                    href: this.state.activeImage,
 	                    label: 'Share',
+	                    onClick: this.shareImage,
 	                    icon: _react2.default.createElement(_FontIcon2.default, { className: 'fa fa-facebook-official' })
 	                  }),
 	                  _react2.default.createElement(_RaisedButton2.default, {
