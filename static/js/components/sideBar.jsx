@@ -19,6 +19,7 @@ const SideBar = (props) => {
       {props.folders.map((folder) => (
         <ListItem
           primaryText={Object.keys(folder)[0]}
+          primaryTogglesNestedList
           leftAvatar={<Avatar
             color={blue300}
             backgroundColor={indigo900}
