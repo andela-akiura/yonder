@@ -10,6 +10,8 @@ import { Card, CardMedia } from 'material-ui/Card';
 import { GridList } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
 
 const style = {
   container: {
@@ -46,6 +48,15 @@ const style = {
     height: '40px',
     position: 'absolute',
     zIndex: '10',
+  },
+  buttonGroup: {
+    margin: 'auto',
+    display: 'flex',
+    position: 'flex',
+    width: '50%',
+  },
+  button: {
+    margin: '5px',
   },
 };
 
@@ -187,6 +198,7 @@ class Home extends Component {
                 style={style.refresh}
               />
                 <Card >
+                <br />
                   <CardMedia>
                     <img
                       height="500"
@@ -195,6 +207,30 @@ class Home extends Component {
                       src={this.state.activeImage}
                     />
                   </CardMedia>
+                  <div style={style.buttonGroup}>
+                    <RaisedButton
+                      style={style.button}
+                      primary href={this.state.activeImage}
+                      label="Download"
+                      download
+                      icon={<FontIcon className="fa fa-cloud-download"/>}
+                    />
+                    <RaisedButton
+                      labelColor="#eef1f8"
+                      backgroundColor="#4468b3"
+                      style={style.button}
+                      href={this.state.activeImage}
+                      label="Share"
+                      icon={<FontIcon className="fa fa-facebook-official"/>}
+                    />
+                    <RaisedButton
+                      style={style.button}
+                      secondary
+                      href={this.state.activeImage}
+                      label="Delete"
+                      icon={<FontIcon className="fa fa-trash"/>}
+                    />
+                  </div>
                 </Card>
                   <div className="row">
                   <Subheader>Filters</Subheader>
