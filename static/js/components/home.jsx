@@ -11,7 +11,9 @@ import { GridList } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
+import Dialog from 'material-ui/Dialog';
 
 const style = {
   container: {
@@ -52,7 +54,7 @@ const style = {
   buttonGroup: {
     margin: 'auto',
     display: 'flex',
-    position: 'flex',
+    position: 'relative ',
     width: '50%',
   },
   button: {
@@ -115,22 +117,42 @@ const updateImages = (url, data = {}) => {
   });
 };
 
+const deleteImage = (url) => {
+  // returns a Promise object.
+  return new Promise((resolve, reject) => {
+    request
+    .delete(url)
+    .set('Authorization', `Bearer facebook ${localStorage.getItem('accessToken')}`)
+    .end((error, result) => {
+      if (!error) {
+        resolve(result.body);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
 
 class Home extends Component {
   constructor() {
     super();
     this.state = {
       folders: [],
+      defaultImage: '/static/images/placeholder.png',
       activeImage: '/static/images/placeholder.png',
       thumbnails: [],
       showFilters: false,
       currentImage: 1,
       filterStatus: 'hide',
+      showDeleteDialog: false,
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.shareImage = this.shareImage.bind(this);
+    this.deleteImage = this.deleteImage.bind(this);
+    this.toggleDeleteDialog = this.toggleDeleteDialog.bind(this);
   }
 
   componentDidMount() {
@@ -185,9 +207,45 @@ class Home extends Component {
     }, (response) => (response));
   }
 
+  toggleDeleteDialog() {
+    this.setState({
+      showDeleteDialog: !this.state.showDeleteDialog,
+    });
+  }
+
+  deleteImage() {
+    this.setState({
+      filterStatus: 'loading',
+      showDeleteDialog: !this.state.showDeleteDialog,
+    });
+    deleteImage(`/api/v1/images/${this.state.currentImage.id}/`)
+      .then(() => {
+        fetchImages('/api/v1/images/').then((response) => {
+          const folders = organizeImages(response, generateFolders(response));
+          this.setState({ folders });
+        });
+        this.setState({
+          activeImage: this.state.defaultImage,
+          filterStatus: 'hide',
+        });
+      });
+  }
+
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
       'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
+    const deleteDialogActions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onClick={this.toggleDeleteDialog}
+      />,
+      <FlatButton
+        label="Delete"
+        primary
+        onClick={this.deleteImage}
+      />,
+    ];
     return this.state.folders.length > 0 ?
       (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -219,6 +277,13 @@ class Home extends Component {
                       src={this.state.activeImage}
                     />
                   </CardMedia>
+                  <Dialog
+                    title="Delete image"
+                    open={this.state.showDeleteDialog}
+                    actions={deleteDialogActions}
+                  >
+                    Are you sure you want to delete the image?
+                  </Dialog>
                   <div style={style.buttonGroup}>
                     <RaisedButton
                       style={style.button}
@@ -238,11 +303,12 @@ class Home extends Component {
                     <RaisedButton
                       style={style.button}
                       secondary
-                      href={this.state.activeImage}
                       label="Delete"
+                      onClick={this.toggleDeleteDialog}
                       icon={<FontIcon className="fa fa-trash"/>}
                     />
                   </div>
+
                 </Card>
                   <div className="row">
                   <Subheader>Filters</Subheader>
