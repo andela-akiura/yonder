@@ -89,6 +89,14 @@ class Filter():
         image.save(new_photo, "JPEG")
         return new_photo
 
+    @staticmethod
+    def flip(old_old_photo, new_photo):
+        """Flip the photo by 180 degrees."""
+        image = Image.open(old_old_photo)
+        image = image.transpose(Image.ROTATE_180)
+        image.save(new_photo, "JPEG")
+        return new_photo
+
 filters = {
     'BLUR': Filter.blur,
     'CONTOUR': Filter.contour,
@@ -100,7 +108,9 @@ filters = {
     'GRAYSCALE': Filter.grayscale,
     'FIND_EDGES': Filter.find_edges,
     'COMPRESS': Filter.compress,
+    'FLIP': Filter.flip,
 }
 
 filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
-                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES', 'COMPRESS']
+                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES', 'COMPRESS',
+                'FLIP']
