@@ -120,6 +120,7 @@ class ImageView(viewsets.ModelViewSet):
         serializer.is_valid()
         return Response(serializer.data)
 
+
 class ThumbnailView(viewsets.ModelViewSet):
     queryset = ThumbnailImage.objects.all()
     serializer_class = ThumbnailImageSerializer
