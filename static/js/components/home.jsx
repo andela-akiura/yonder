@@ -60,6 +60,22 @@ const style = {
   button: {
     margin: '5px',
   },
+  uploadButton: {
+    width: '118px',
+    display: 'flex',
+    position: 'relative',
+    margin: '5px auto',
+  },
+  imageInput: {
+    cursor: '-webkit-grab',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
 };
 
 const generateFolders = (imageList) => (
@@ -253,6 +269,17 @@ class Home extends Component {
             <Menu />
             <div className="row start-xs">
               <div style={style.sideBar} className="col-xs-3">
+
+              <RaisedButton
+                style={style.uploadButton}
+                label="Upload"
+                labelPosition="before"
+                secondary
+                icon={<FontIcon className="fa fa-cloud-upload"/>}
+              >
+              <input type="file" style={style.imageInput} />
+
+              </RaisedButton>
                 <SideBar
                   folders={this.state.folders}
                   updateCanvas={this.updateCanvas}

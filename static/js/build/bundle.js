@@ -20644,6 +20644,22 @@
 	  },
 	  button: {
 	    margin: '5px'
+	  },
+	  uploadButton: {
+	    width: '118px',
+	    display: 'flex',
+	    position: 'relative',
+	    margin: '5px auto'
+	  },
+	  imageInput: {
+	    cursor: '-webkit-grab',
+	    position: 'absolute',
+	    top: 0,
+	    bottom: 0,
+	    right: 0,
+	    left: 0,
+	    width: '100%',
+	    opacity: 0
 	  }
 	};
 
@@ -20856,6 +20872,17 @@
 	            _react2.default.createElement(
 	              'div',
 	              { style: style.sideBar, className: 'col-xs-3' },
+	              _react2.default.createElement(
+	                _RaisedButton2.default,
+	                {
+	                  style: style.uploadButton,
+	                  label: 'Upload',
+	                  labelPosition: 'before',
+	                  secondary: true,
+	                  icon: _react2.default.createElement(_FontIcon2.default, { className: 'fa fa-cloud-upload' })
+	                },
+	                _react2.default.createElement('input', { type: 'file', style: style.imageInput })
+	              ),
 	              _react2.default.createElement(_sideBar2.default, {
 	                folders: this.state.folders,
 	                updateCanvas: this.updateCanvas
