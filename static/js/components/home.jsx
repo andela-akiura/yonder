@@ -14,6 +14,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
+import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/MenuItem';
+import {
+  Step,
+  Stepper,
+  StepLabel,
+  StepContent,
+} from 'material-ui/Stepper';
 
 const style = {
   container: {
@@ -60,6 +69,22 @@ const style = {
   button: {
     margin: '5px',
   },
+  uploadButton: {
+    width: '118px',
+    display: 'flex',
+    position: 'relative',
+    margin: '5px auto',
+  },
+  imageInput: {
+    cursor: '-webkit-grab',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    width: '100%',
+    opacity: 0,
+  },
 };
 
 const generateFolders = (imageList) => (
@@ -89,6 +114,23 @@ const fetchImages = (url) => {
   return new Promise((resolve, reject) => {
     request
     .get(url)
+    .set('Authorization', `Bearer facebook ${localStorage.getItem('accessToken')}`)
+    .end((error, result) => {
+      if (!error) {
+        resolve(result.body);
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+const uploadImage = (url, data) => {
+  // returns a Promise object.
+  return new Promise((resolve, reject) => {
+    request
+    .post(url)
+    .send(data)
     .set('Authorization', `Bearer facebook ${localStorage.getItem('accessToken')}`)
     .end((error, result) => {
       if (!error) {
@@ -139,6 +181,7 @@ class Home extends Component {
     super();
     this.state = {
       folders: [],
+      folderNames: [],
       defaultImage: '/static/images/placeholder.png',
       activeImage: '/static/images/placeholder.png',
       thumbnails: [],
@@ -146,6 +189,11 @@ class Home extends Component {
       currentImage: 1,
       filterStatus: 'hide',
       showDeleteDialog: false,
+      showUploadDialog: false,
+      stepIndex: 0,
+      newImageName: 'No image chosen',
+      newFolderName: '',
+      uploadedImage: {},
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
@@ -153,13 +201,20 @@ class Home extends Component {
     this.shareImage = this.shareImage.bind(this);
     this.deleteImage = this.deleteImage.bind(this);
     this.toggleDeleteDialog = this.toggleDeleteDialog.bind(this);
+    this.toggleUploadDialog = this.toggleUploadDialog.bind(this);
+    this.handleSelectImage = this.handleSelectImage.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
+    this.updateStepperIndex = this.updateStepperIndex.bind(this);
+    this.selectFolder = this.selectFolder.bind(this);
+    this.reduceStepperIndex = this.reduceStepperIndex.bind(this);
   }
 
   componentDidMount() {
     if (localStorage.getItem('accessToken')) {
       fetchImages('/api/v1/images/').then((response) => {
-        const folders = organizeImages(response, generateFolders(response));
-        this.setState({ folders });
+        const folderNames = generateFolders(response);
+        const folders = organizeImages(response, folderNames);
+        this.setState({ folders, folderNames });
       });
       fetchImages('/api/v1/thumbnails/').then((response) => {
         const thumbnails = response[0].filters;
@@ -231,6 +286,71 @@ class Home extends Component {
       });
   }
 
+  toggleUploadDialog() {
+    this.setState({
+      showUploadDialog: !this.state.showUploadDialog,
+    });
+  }
+
+  handleSelectImage() {
+    const uploadedImage = document.getElementById('image-upload').files[0];
+    if (uploadedImage) {
+      this.setState({
+        newImageName: uploadedImage.name,
+        uploadedImage });
+    }
+  }
+
+  handleUpload() {
+    this.toggleUploadDialog();
+    this.setState({ filterStatus: 'loading' });
+    const formData = new FormData();
+    formData.append('original_image', this.state.uploadedImage);
+    formData.append('folder_name', this.state.newFolderName);
+    uploadImage('/api/v1/images/', formData).then((response) => {
+      this.setState({
+        filterStatus: 'hide',
+        activeImage: response.image_url,
+        currentImage: response,
+      });
+      fetchImages('/api/v1/images/').then((images) => {
+        const folders = organizeImages(images, generateFolders(images));
+        this.setState({ folders });
+      });
+    });
+  }
+
+  updateStepperIndex() {
+    if (this.state.stepIndex !== 2) {
+      this.setState({
+        stepIndex: this.state.stepIndex + 1,
+      })
+    } else {
+      this.setState({
+        stepIndex: 0,
+      })
+    }
+  }
+  reduceStepperIndex() {
+    if (this.state.stepIndex !== 0) {
+      this.setState({
+        stepIndex: this.state.stepIndex - 1,
+      });
+    } else {
+      this.setState({
+        stepIndex: 0,
+      });
+    }
+  }
+
+  selectFolder(event, index, value) {
+    if (event.target.value === undefined) {
+      this.setState({ newFolderName: value });
+    } else {
+      this.setState({ newFolderName: event.target.value });
+    }
+  }
+
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
       'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
@@ -246,6 +366,73 @@ class Home extends Component {
         onClick={this.deleteImage}
       />,
     ];
+    const contentStyle = { margin: '16px 16px' };
+    const uploadDialogActions = [
+      <FlatButton label="Cancel"
+        primary
+        onClick={this.toggleUploadDialog}
+      />,
+    ]
+    const stepContents = [
+      <div style={contentStyle}>
+            <p>{this.state.newImageName}</p>
+              <RaisedButton
+                label="Select" labelPosition="before" secondary
+                icon={<FontIcon className="fa fa-cloud-upload"/>}
+                style={style.button}
+              >
+              <input
+                type="file" id="image-upload" style={style.imageInput}
+                onChange={this.handleSelectImage}
+              />
+              </RaisedButton>
+
+          <RaisedButton
+            label="Next" primary
+            onClick={this.updateStepperIndex}
+            style={style.button}
+          />
+      </div>,
+      <div style={contentStyle}>
+        <SelectField hintText="Select existing folder"
+          value={this.state.newFolderName} maxHeight={200}
+          onChange={this.selectFolder}
+          disabled={this.state.folderNames.length < 1}
+        >
+          {this.state.folderNames.map(
+            (name, index) => (
+              <MenuItem value={name} key={index} primaryText={name} />
+            ))}
+        </SelectField>
+        <p>Or</p>
+        <TextField hintText="Enter new folder name" onChange={this.selectFolder}
+          value={this.state.newFolderName}
+        />
+        <FlatButton
+          label="Back" primary
+          onClick={this.reduceStepperIndex}
+          style={style.button}
+        />
+        <RaisedButton
+          label="Next" primary
+          onClick={this.updateStepperIndex}
+          style={style.button}
+        />
+      </div>,
+      <div style={contentStyle}>
+        <p>Upload your image</p>
+        <FlatButton
+          label="Back" primary
+          onClick={this.reduceStepperIndex}
+          style={style.button}
+        />
+        <RaisedButton
+          label="Upload" primary
+          onClick={this.handleUpload}
+          style={style.button}
+        />
+      </div>,
+    ];
     return this.state.folders.length > 0 ?
       (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
@@ -253,6 +440,33 @@ class Home extends Component {
             <Menu />
             <div className="row start-xs">
               <div style={style.sideBar} className="col-xs-3">
+
+              <RaisedButton
+                style={style.uploadButton}
+                label="Upload"
+                labelPosition="before"
+                secondary
+                onClick={this.toggleUploadDialog}
+              />
+              <Dialog
+                title="Upload image"
+                open={this.state.showUploadDialog}
+                actions={uploadDialogActions}
+              >
+                <Stepper activeStep={this.state.stepIndex}>
+                  <Step>
+                    <StepLabel>Choose an image</StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel>Select a folder</StepLabel>
+                  </Step>
+                  <Step>
+                    <StepLabel>Upload Image</StepLabel>
+                  </Step>
+                </Stepper>
+                {stepContents[this.state.stepIndex]}
+
+              </Dialog>
                 <SideBar
                   folders={this.state.folders}
                   updateCanvas={this.updateCanvas}
@@ -261,25 +475,18 @@ class Home extends Component {
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
               <RefreshIndicator
-                size={40}
-                left={10}
-                top={0}
-                status={this.state.filterStatus}
-                style={style.refresh}
+                size={40} left={10} top={0}
+                status={this.state.filterStatus} style={style.refresh}
               />
                 <Card >
                 <br />
                   <CardMedia>
-                    <img
-                      height="500"
-                      width="800"
-                      style={style.image}
+                    <img height="500" width="800" style={style.image}
                       src={this.state.activeImage}
                     />
                   </CardMedia>
                   <Dialog
-                    title="Delete image"
-                    open={this.state.showDeleteDialog}
+                    title="Delete image" open={this.state.showDeleteDialog}
                     actions={deleteDialogActions}
                   >
                     Are you sure you want to delete the image?
@@ -288,15 +495,12 @@ class Home extends Component {
                     <RaisedButton
                       style={style.button}
                       primary href={this.state.activeImage}
-                      label="Download"
-                      download
+                      label="Download" download
                       icon={<FontIcon className="fa fa-cloud-download"/>}
                     />
                     <RaisedButton
-                      labelColor="#eef1f8"
-                      backgroundColor="#4468b3"
-                      style={style.button}
-                      label="Share"
+                      labelColor="#eef1f8" backgroundColor="#4468b3"
+                      style={style.button} label="Share"
                       onClick={this.shareImage}
                       icon={<FontIcon className="fa fa-facebook-official"/>}
                     />
@@ -318,11 +522,8 @@ class Home extends Component {
                     >
                     {this.state.thumbnails.map((thumb, index) => (
                       <Thumbnail
-                        thumbnail={thumb}
-                        id={index}
-                        key={index}
-                        tabIndex={thumb.id}
-                        styling={style}
+                        thumbnail={thumb} id={index} key={index}
+                        tabIndex={thumb.id} styling={style}
                         _onClick={this.applyFilters}
                       />
                     ))}
