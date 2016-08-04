@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 
 
 const style = {
@@ -17,6 +17,11 @@ const style = {
     fontSize: '15px',
     color: 'white',
   },
+  brand: {
+    fontFamily: 'Shadows Into Light',
+    fontSize: '40px',
+    color: 'white',
+  },
   logout: {
     fontSize: '18px',
     color: 'white',
@@ -27,12 +32,12 @@ const profPic = localStorage.getItem('profPic');
 const logout = () => {
   localStorage.clear();
   window.location.href = '/';
-}
+};
 
 const Menu = () => (
   <Toolbar className="toolbar" style={style.menuBar}>
     <ToolbarGroup firstChild>
-      <ToolbarTitle style={style.logout} text="khali"/>
+      <ToolbarTitle style={style.brand} text="KHALI"/>
     </ToolbarGroup>
     <ToolbarGroup lastChild>
       <div style={style.greeting}>
@@ -46,8 +51,8 @@ const Menu = () => (
       <FlatButton
         style={style.logout}
         onClick={logout}
-        label='LOGOUT'
-        />
+        label="LOGOUT"
+      />
     </ToolbarGroup>
   </Toolbar>
 );

@@ -53,11 +53,15 @@ const style = {
   },
   refresh: {
     display: 'flex',
-    margin: '300px 860px',
+    margin: 'auto',
+    top: '150px',
+    left: '50px',
+    bottom: '50px',
+    right: '50px',
     width: '40px',
     height: '40px',
-    position: 'absolute',
-    zIndex: '10',
+    position: 'relative',
+    // zIndex: '10',
   },
   buttonGroup: {
     margin: 'auto',
@@ -210,6 +214,7 @@ class Home extends Component {
     this.reduceStepperIndex = this.reduceStepperIndex.bind(this);
     this.persistFilter = this.persistFilter.bind(this);
     this.toggleEmptyImageFilter = this.toggleEmptyImageFilter.bind(this);
+    this.undoFilter = this.undoFilter.bind(this);
   }
 
   componentDidMount() {
@@ -253,12 +258,11 @@ class Home extends Component {
       .then((response) => {
         this.setState({
           activeImage: response.filtered_image,
-          filterStatus: 'hide',
           saveFilters: 0,
         });
         fetchImages('/api/v1/images/').then((images) => {
           const folders = organizeImages(images, generateFolders(images));
-          this.setState({ folders });
+          this.setState({ folders, filterStatus: 'hide' });
         });
       });
   }
@@ -351,7 +355,8 @@ class Home extends Component {
       });
       fetchImages('/api/v1/images/').then((images) => {
         const folders = organizeImages(images, generateFolders(images));
-        this.setState({ folders, stepIndex: 0, newFolderName: '', newImageName: '' });
+        const folderNames = generateFolders(images);
+        this.setState({ folders, folderNames, stepIndex: 0, newFolderName: '', newImageName: '' });
       });
     });
   }
@@ -387,6 +392,10 @@ class Home extends Component {
     }
   }
 
+  undoFilter() {
+    this.updateCanvas(this.state.currentImage);
+  }
+
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
       'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
@@ -408,7 +417,7 @@ class Home extends Component {
         primary
         onClick={this.toggleUploadDialog}
       />,
-    ]
+    ];
     const stepContents = [
       <div style={contentStyle}>
             <p>{this.state.newImageName}</p>
@@ -509,7 +518,8 @@ class Home extends Component {
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
               <RefreshIndicator
-                size={40} left={10} top={0}
+                class="spinner"
+                size={40}
                 status={this.state.filterStatus} style={style.refresh}
               />
                 <Card >
@@ -533,6 +543,12 @@ class Home extends Component {
                     Are you sure you want to delete the image?
                   </Dialog>
                   <div style={style.buttonGroup}>
+                    <FlatButton
+                      style={style.button}
+                      primary
+                      icon={<FontIcon className="fa fa-undo"/>}
+                      onClick={this.undoFilter}
+                    />
                     <RaisedButton
                       style={style.button}
                       primary href={this.state.activeImage}

@@ -58,10 +58,10 @@ class Filter():
         return new_photo
 
     @staticmethod
-    def emboss(old_photo, new_photo):
-        """Apply the EMBOSS filter."""
+    def smooth_more(old_photo, new_photo):
+        """Apply the smooth more filter."""
         image = Image.open(old_photo)
-        image = image.filter(ImageFilter.EMBOSS)
+        image = image.filter(ImageFilter.SMOOTH_MORE)
         image.save(new_photo, "JPEG")
         return new_photo
 
@@ -102,7 +102,7 @@ filters = {
     'CONTOUR': Filter.contour,
     'DETAIL': Filter.detail,
     'EDGE_ENHANCE': Filter.edge_enhance,
-    'EMBOSS': Filter.emboss,
+    'SMOOTH_MORE': Filter.smooth_more,
     'SMOOTH': Filter.smooth,
     'SHARPEN': Filter.sharpen,
     'GRAYSCALE': Filter.grayscale,
@@ -111,6 +111,6 @@ filters = {
     'FLIP': Filter.flip,
 }
 
-filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
+filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'SMOOTH_MORE',
                 'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES', 'COMPRESS',
                 'FLIP']

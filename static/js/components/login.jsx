@@ -7,24 +7,31 @@ import FontIcon from 'material-ui/FontIcon';
 const style = {
   fbIcon: {
     color: '#4468b3',
+    width: '100%',
   },
   background: {
-    background: 'url("/static/images/perfect_shot.jpg")no-repeat center fixed',
+    background: 'url("/static/images/perfect_shot.jpg")no-repeat center center fixed',
+    '-webkit-background-size': 'cover',
+    '-moz-background-size': 'cover',
+    '-o-background-size': 'cover',
+    'background-size': 'cover',
     overflow: 'hidden',
     height: '100vh',
-
-  },
-  appDescription: {
-    margin: '150px auto',
-    width: '500px',
-    height: '100px',
   },
   appName: {
-    fontFamily: 'Frijole',
+    fontFamily: 'Shadows Into Light',
+    width: '250px',
+    margin: '20px auto',
+    position: 'relative',
+    display: 'flex',
     fontSize: '70px',
     color: '#E57373',
   },
   appTagLine: {
+    width: '500px',
+    margin: '40px auto',
+    position: 'relative',
+    display: 'flex',
     fontFamily: 'Shadows Into Light',
     fontSize: '30px',
     color: '#E57373',
@@ -57,7 +64,7 @@ const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
     <div style={style.background}>
-    <div style={style.appDescription}>
+    <div>
       <p style={style.appName}>
       KHALI.
       </p>
@@ -67,7 +74,7 @@ const LoginForm = () => {
     </div>
       <div className="login-button">
         <RaisedButton
-          label="Continue with facebook"
+          label="Login with Facebook"
           onClick={login}
           labelStyle={style.fbIcon}
           icon={<FontIcon className="fa fa-facebook-official social" />}
