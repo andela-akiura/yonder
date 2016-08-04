@@ -74,7 +74,6 @@ const LoginForm = () => {
         <RaisedButton
           label="Continue with facebook"
           onClick={login}
-          labelStyle={style.fbIcon}
           icon={<FontIcon className="fa fa-facebook-official social" />}
         />
       </div>

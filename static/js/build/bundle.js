@@ -46332,7 +46332,6 @@
 	        _react2.default.createElement(_RaisedButton2.default, {
 	          label: 'Continue with facebook',
 	          onClick: login,
-	          labelStyle: style.fbIcon,
 	          icon: _react2.default.createElement(_FontIcon2.default, { className: 'fa fa-facebook-official social' })
 	        })
 	      )
