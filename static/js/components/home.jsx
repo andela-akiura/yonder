@@ -5,7 +5,6 @@ import Menu from './menu.jsx';
 import SideBar from './sideBar.jsx';
 import Thumbnail from './thumbnail.jsx';
 import request from 'superagent';
-import LinearProgress from 'material-ui/LinearProgress';
 import { Card, CardMedia } from 'material-ui/Card';
 import { GridList } from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -21,7 +20,6 @@ import {
   Step,
   Stepper,
   StepLabel,
-  StepContent,
 } from 'material-ui/Stepper';
 
 const style = {
@@ -64,7 +62,7 @@ const style = {
     margin: 'auto',
     display: 'flex',
     position: 'relative ',
-    width: '50%',
+    width: '75%',
   },
   button: {
     margin: '5px',
@@ -191,6 +189,7 @@ class Home extends Component {
       showDeleteDialog: false,
       showUploadDialog: false,
       stepIndex: 0,
+      saveFilters: 0,
       newImageName: 'No image chosen',
       newFolderName: '',
       uploadedImage: {},
@@ -207,6 +206,7 @@ class Home extends Component {
     this.updateStepperIndex = this.updateStepperIndex.bind(this);
     this.selectFolder = this.selectFolder.bind(this);
     this.reduceStepperIndex = this.reduceStepperIndex.bind(this);
+    this.persistFilter = this.persistFilter.bind(this);
   }
 
   componentDidMount() {
@@ -242,13 +242,36 @@ class Home extends Component {
     this.setState({ filterStatus: 'loading' });
     // make a put request to
     updateImages(`http://${window.location.host}/api/v1/images/${this.state.currentImage.id}/`,
-      { filter_name: filterName, save_changes: 0 })
+      { filter_name: filterName, save_changes: this.state.saveFilters })
       .then((response) => {
         this.setState({
           activeImage: response.filtered_image,
           filterStatus: 'hide',
+          saveFilters: 0,
+        });
+        fetchImages('/api/v1/images/').then((images) => {
+          const folders = organizeImages(images, generateFolders(images));
+          this.setState({ folders });
         });
       });
+  }
+
+  persistFilter() {
+    this.setState({ saveFilters: 1, filterStatus: 'loading' }, () => {
+      updateImages(`http://${window.location.host}/api/v1/images/${this.state.currentImage.id}/`,
+        { filter_name: 'NONE', save_changes: this.state.saveFilters })
+        .then((response) => {
+          this.setState({
+            activeImage: response.original_image,
+            filterStatus: 'hide',
+            saveFilters: 0,
+          });
+          fetchImages('/api/v1/images/').then((images) => {
+            const folders = organizeImages(images, generateFolders(images));
+            this.setState({ folders });
+          });
+        });
+    });
   }
 
   shareImage() {
@@ -503,6 +526,13 @@ class Home extends Component {
                       icon={<FontIcon className="fa fa-facebook-official"/>}
                     />
                     <RaisedButton
+                      primary
+                      style={style.button} label="Save changes"
+                      onClick={this.persistFilter}
+                      icon={<FontIcon className="fa fa-save"/>}
+                    />
+
+                    <RaisedButton
                       style={style.button}
                       secondary
                       label="Delete"
@@ -510,6 +540,7 @@ class Home extends Component {
                       icon={<FontIcon className="fa fa-trash"/>}
                     />
                   </div>
+
 
                 </Card>
                   <div className="row">
