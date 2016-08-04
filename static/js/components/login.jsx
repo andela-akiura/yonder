@@ -72,8 +72,9 @@ const LoginForm = () => {
     </div>
       <div className="login-button">
         <RaisedButton
-          label="Login"
+          label="Login with Facebook"
           onClick={login}
+          labelStyle={style.fbIcon}
           icon={<FontIcon className="fa fa-facebook-official social" />}
         />
       </div>

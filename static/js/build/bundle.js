@@ -46330,8 +46330,9 @@
 	        'div',
 	        { className: 'login-button' },
 	        _react2.default.createElement(_RaisedButton2.default, {
-	          label: 'Login',
+	          label: 'Login with Facebook',
 	          onClick: login,
+	          labelStyle: style.fbIcon,
 	          icon: _react2.default.createElement(_FontIcon2.default, { className: 'fa fa-facebook-official social' })
 	        })
 	      )
