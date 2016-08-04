@@ -20919,7 +20919,7 @@
 	        });
 	        fetchImages('/api/v1/images/').then(function (images) {
 	          var folders = organizeImages(images, generateFolders(images));
-	          _this5.setState({ folders: folders });
+	          _this5.setState({ folders: folders, stepIndex: 0, newFolderName: '', newImageName: '' });
 	        });
 	      });
 	    }
