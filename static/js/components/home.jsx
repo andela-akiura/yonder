@@ -433,9 +433,7 @@ class Home extends Component {
         />
       </div>,
     ];
-    return this.state.folders.length > 0 ?
-      (
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
+    return (<MuiThemeProvider muiTheme={getMuiTheme()}>
           <div style={style.container}>
             <Menu />
             <div className="row start-xs">
@@ -532,15 +530,7 @@ class Home extends Component {
               </div>
             </div>
           </div>
-        </MuiThemeProvider>) : (
-          <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <div>
-              <Menu />
-              <div>
-                <LinearProgress mode="indeterminate" />
-              </div>
-            </div>
-          </MuiThemeProvider>);
+        </MuiThemeProvider>);
   }
 }
 
