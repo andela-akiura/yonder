@@ -46472,12 +46472,6 @@
 	};
 
 	var login = function login() {
-	  // check login status and
-	  // window.FB.getLoginStatus((response) => {
-	  //   if (response.status === 'connected') {
-	  //     window.FB.logout();
-	  //   }
-	  // });
 	  window.FB.login(function (payload) {
 	    if (payload.authResponse) {
 	      window.FB.api('/me', { fields: 'name,picture' }, function (me) {

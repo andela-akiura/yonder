@@ -42,12 +42,6 @@ const onSuccessfulLogin = (resp) => {
 };
 
 const login = () => {
-  // check login status and
-  // window.FB.getLoginStatus((response) => {
-  //   if (response.status === 'connected') {
-  //     window.FB.logout();
-  //   }
-  // });
   window.FB.login((payload) => {
     if (payload.authResponse) {
       window.FB.api('/me', { fields: 'name,picture' }, (me) => {
