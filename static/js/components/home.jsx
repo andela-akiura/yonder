@@ -315,7 +315,7 @@ class Home extends Component {
       });
       fetchImages('/api/v1/images/').then((images) => {
         const folders = organizeImages(images, generateFolders(images));
-        this.setState({ folders });
+        this.setState({ folders, stepIndex: 0, newFolderName: '', newImageName: '' });
       });
     });
   }
@@ -324,11 +324,11 @@ class Home extends Component {
     if (this.state.stepIndex !== 2) {
       this.setState({
         stepIndex: this.state.stepIndex + 1,
-      })
+      });
     } else {
       this.setState({
         stepIndex: 0,
-      })
+      });
     }
   }
   reduceStepperIndex() {
