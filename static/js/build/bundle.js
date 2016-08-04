@@ -46254,10 +46254,15 @@
 
 	var style = {
 	  fbIcon: {
-	    color: '#4468b3'
+	    color: '#4468b3',
+	    width: '100%'
 	  },
 	  background: {
-	    background: 'url("/static/images/perfect_shot.jpg")no-repeat center fixed',
+	    background: 'url("/static/images/perfect_shot.jpg")no-repeat center center fixed',
+	    '-webkit-background-size': 'cover',
+	    '-moz-background-size': 'cover',
+	    '-o-background-size': 'cover',
+	    'background-size': 'cover',
 	    overflow: 'hidden',
 	    height: '100vh'
 
