@@ -20958,7 +20958,8 @@
 	        });
 	        fetchImages('/api/v1/images/').then(function (images) {
 	          var folders = organizeImages(images, generateFolders(images));
-	          _this6.setState({ folders: folders, stepIndex: 0, newFolderName: '', newImageName: '' });
+	          var folderNames = generateFolders(images);
+	          _this6.setState({ folders: folders, folderNames: folderNames, stepIndex: 0, newFolderName: '', newImageName: '' });
 	        });
 	      });
 	    }

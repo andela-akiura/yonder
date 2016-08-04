@@ -351,7 +351,8 @@ class Home extends Component {
       });
       fetchImages('/api/v1/images/').then((images) => {
         const folders = organizeImages(images, generateFolders(images));
-        this.setState({ folders, stepIndex: 0, newFolderName: '', newImageName: '' });
+        const folderNames = generateFolders(images);
+        this.setState({ folders, folderNames, stepIndex: 0, newFolderName: '', newImageName: '' });
       });
     });
   }
