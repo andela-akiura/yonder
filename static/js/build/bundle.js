@@ -21054,7 +21054,7 @@
 	          style: style.button
 	        })
 	      )];
-	      return this.state.folders.length > 0 ? _react2.default.createElement(
+	      return _react2.default.createElement(
 	        _MuiThemeProvider2.default,
 	        { muiTheme: (0, _getMuiTheme2.default)() },
 	        _react2.default.createElement(
@@ -21194,19 +21194,6 @@
 	                )
 	              )
 	            )
-	          )
-	        )
-	      ) : _react2.default.createElement(
-	        _MuiThemeProvider2.default,
-	        { muiTheme: (0, _getMuiTheme2.default)() },
-	        _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_menu2.default, null),
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(_LinearProgress2.default, { mode: 'indeterminate' })
 	          )
 	        )
 	      );
