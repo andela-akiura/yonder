@@ -46472,20 +46472,14 @@
 	};
 
 	var login = function login() {
-	  // check login status and
-	  window.FB.getLoginStatus(function (response) {
-	    if (response.status === 'connected') {
-	      window.FB.logout();
+	  window.FB.login(function (payload) {
+	    if (payload.authResponse) {
+	      window.FB.api('/me', { fields: 'name,picture' }, function (me) {
+	        Object.assign(me, payload.authResponse);
+	        onSuccessfulLogin(me);
+	      });
 	    }
-	    window.FB.login(function (payload) {
-	      if (payload.authResponse) {
-	        window.FB.api('/me', { fields: 'name,picture' }, function (me) {
-	          Object.assign(me, payload.authResponse);
-	          onSuccessfulLogin(me);
-	        });
-	      }
-	    }, { scope: 'email,public_profile', return_scopes: true });
-	  });
+	  }, { scope: 'email,public_profile', return_scopes: true });
 	};
 
 	var LoginForm = function LoginForm() {
