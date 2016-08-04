@@ -16,6 +16,7 @@ import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
 import {
   Step,
   Stepper,
@@ -193,6 +194,7 @@ class Home extends Component {
       newImageName: 'No image chosen',
       newFolderName: '',
       uploadedImage: {},
+      showNoImageWarning: false,
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
@@ -207,6 +209,7 @@ class Home extends Component {
     this.selectFolder = this.selectFolder.bind(this);
     this.reduceStepperIndex = this.reduceStepperIndex.bind(this);
     this.persistFilter = this.persistFilter.bind(this);
+    this.toggleEmptyImageFilter = this.toggleEmptyImageFilter.bind(this);
   }
 
   componentDidMount() {
@@ -238,6 +241,10 @@ class Home extends Component {
   }
 
   applyFilters(filterName) {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({ showNoImageWarning: true });
+      return;
+    }
     // show progress indicator
     this.setState({ filterStatus: 'loading' });
     // make a put request to
@@ -288,6 +295,12 @@ class Home extends Component {
   toggleDeleteDialog() {
     this.setState({
       showDeleteDialog: !this.state.showDeleteDialog,
+    });
+  }
+
+  toggleEmptyImageFilter() {
+    this.setState({
+      showNoImageWarning: !this.state.showNoImageWarning,
     });
   }
 
@@ -500,6 +513,13 @@ class Home extends Component {
                 status={this.state.filterStatus} style={style.refresh}
               />
                 <Card >
+                <Snackbar
+                  open={this.state.showNoImageWarning}
+                  message="Please select an image before applying a filter"
+                  autoHideDuration={4000}
+                  onRequestClose={this.toggleEmptyImageFilter}
+                  style={{ transform: 'translateY(-350%)' }}
+                />
                 <br />
                   <CardMedia>
                     <img height="500" width="800" style={style.image}
