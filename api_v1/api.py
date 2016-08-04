@@ -106,6 +106,7 @@ class ImageView(viewsets.ModelViewSet):
             image.original_image = image.filtered_image
             image.filtered_image = None
             image.filter_name = 'NONE'
+            image.save()
         else:
             old_image = storage.open(original.name, 'r')
             temp_image = cStringIO.StringIO()
