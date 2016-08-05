@@ -210,6 +210,7 @@ class Home extends Component {
     this.reduceStepperIndex = this.reduceStepperIndex.bind(this);
     this.persistFilter = this.persistFilter.bind(this);
     this.toggleEmptyImageFilter = this.toggleEmptyImageFilter.bind(this);
+    this.undoFilter = this.undoFilter.bind(this);
   }
 
   componentDidMount() {
@@ -388,6 +389,10 @@ class Home extends Component {
     }
   }
 
+  undoFilter() {
+    this.updateCanvas(this.state.currentImage);
+  }
+
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
       'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES'];
@@ -409,7 +414,7 @@ class Home extends Component {
         primary
         onClick={this.toggleUploadDialog}
       />,
-    ]
+    ];
     const stepContents = [
       <div style={contentStyle}>
             <p>{this.state.newImageName}</p>
@@ -534,6 +539,12 @@ class Home extends Component {
                     Are you sure you want to delete the image?
                   </Dialog>
                   <div style={style.buttonGroup}>
+                    <FlatButton
+                      style={style.button}
+                      primary
+                      icon={<FontIcon className="fa fa-undo"/>}
+                      onClick={this.undoFilter}
+                    />
                     <RaisedButton
                       style={style.button}
                       primary href={this.state.activeImage}
