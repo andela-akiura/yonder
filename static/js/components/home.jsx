@@ -53,11 +53,15 @@ const style = {
   },
   refresh: {
     display: 'flex',
-    margin: '300px 860px',
+    margin: 'auto',
+    top: '150px',
+    left: '50px',
+    bottom: '50px',
+    right: '50px',
     width: '40px',
     height: '40px',
-    position: 'absolute',
-    zIndex: '10',
+    position: 'relative',
+    // zIndex: '10',
   },
   buttonGroup: {
     margin: 'auto',
@@ -255,6 +259,7 @@ class Home extends Component {
         this.setState({
           activeImage: response.filtered_image,
           filterStatus: 'hide',
+          progess: 100,
           saveFilters: 0,
         });
         fetchImages('/api/v1/images/').then((images) => {
@@ -515,7 +520,8 @@ class Home extends Component {
               <div className="col-xs-1"></div>
               <div className="col-xs-7">
               <RefreshIndicator
-                size={40} left={10} top={0}
+                class="spinner"
+                size={40}
                 status={this.state.filterStatus} style={style.refresh}
               />
                 <Card >

@@ -31,3 +31,8 @@ a:link {
 .social {
   color: #4468b3 !important;
 }
+
+.spinner {
+  z-index: 15;
+  
+}
