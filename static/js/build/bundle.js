@@ -28993,6 +28993,11 @@
 	    fontSize: '15px',
 	    color: 'white'
 	  },
+	  brand: {
+	    fontFamily: 'Shadows Into Light',
+	    fontSize: '40px',
+	    color: 'white'
+	  },
 	  logout: {
 	    fontSize: '18px',
 	    color: 'white'
@@ -29012,7 +29017,7 @@
 	    _react2.default.createElement(
 	      _Toolbar.ToolbarGroup,
 	      { firstChild: true },
-	      _react2.default.createElement(_Toolbar.ToolbarTitle, { style: style.logout, text: 'khali' })
+	      _react2.default.createElement(_Toolbar.ToolbarTitle, { style: style.brand, text: 'KHALI' })
 	    ),
 	    _react2.default.createElement(
 	      _Toolbar.ToolbarGroup,
@@ -46874,19 +46879,21 @@
 	    'background-size': 'cover',
 	    overflow: 'hidden',
 	    height: '100vh'
-
-	  },
-	  appDescription: {
-	    margin: '150px auto',
-	    width: '500px',
-	    height: '100px'
 	  },
 	  appName: {
-	    fontFamily: 'Frijole',
+	    fontFamily: 'Shadows Into Light',
+	    width: '250px',
+	    margin: '20px auto',
+	    position: 'relative',
+	    display: 'flex',
 	    fontSize: '70px',
 	    color: '#E57373'
 	  },
 	  appTagLine: {
+	    width: '500px',
+	    margin: '40px auto',
+	    position: 'relative',
+	    display: 'flex',
 	    fontFamily: 'Shadows Into Light',
 	    fontSize: '30px',
 	    color: '#E57373'
@@ -46923,7 +46930,7 @@
 	      { style: style.background },
 	      _react2.default.createElement(
 	        'div',
-	        { style: style.appDescription },
+	        null,
 	        _react2.default.createElement(
 	          'p',
 	          { style: style.appName },

@@ -17,19 +17,21 @@ const style = {
     'background-size': 'cover',
     overflow: 'hidden',
     height: '100vh',
-
-  },
-  appDescription: {
-    margin: '150px auto',
-    width: '500px',
-    height: '100px',
   },
   appName: {
-    fontFamily: 'Frijole',
+    fontFamily: 'Shadows Into Light',
+    width: '250px',
+    margin: '20px auto',
+    position: 'relative',
+    display: 'flex',
     fontSize: '70px',
     color: '#E57373',
   },
   appTagLine: {
+    width: '500px',
+    margin: '40px auto',
+    position: 'relative',
+    display: 'flex',
     fontFamily: 'Shadows Into Light',
     fontSize: '30px',
     color: '#E57373',
@@ -62,7 +64,7 @@ const LoginForm = () => {
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
     <div style={style.background}>
-    <div style={style.appDescription}>
+    <div>
       <p style={style.appName}>
       KHALI.
       </p>
