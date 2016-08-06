@@ -8,8 +8,8 @@ FILTERS = (
     ('CONTOUR', 'contour',),
     ('DETAIL', 'detail'),
     ('EDGE_ENHANCE', 'edge enhance'),
-    ('EMBOSS', 'emboss'),
     ('SMOOTH', 'smoothen'),
+    ('SMOOTH_MORE', 'smooth more'),
     ('SHARPEN', 'sharpen'),
     ('FLIP', 'flip'),
     ('GRAYSCALE', 'grayscale'),
@@ -35,6 +35,7 @@ class Image(models.Model):
 class ThumbnailImage(models.Model):
     """Model for the parent thumbnails."""
     thumbnail = models.ImageField(upload_to='images/thumbnails/', blank=False)
+
 
 class ThumbnailFilter(models.Model):
     """Model for the filtered thumbnails."""
