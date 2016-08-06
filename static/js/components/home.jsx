@@ -258,13 +258,11 @@ class Home extends Component {
       .then((response) => {
         this.setState({
           activeImage: response.filtered_image,
-          filterStatus: 'hide',
-          progess: 100,
           saveFilters: 0,
         });
         fetchImages('/api/v1/images/').then((images) => {
           const folders = organizeImages(images, generateFolders(images));
-          this.setState({ folders });
+          this.setState({ folders, filterStatus: 'hide' });
         });
       });
   }
