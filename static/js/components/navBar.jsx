@@ -5,7 +5,7 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 
 
 const style = {
-  menuBar: {
+  navBar: {
     backgroundColor: '#00bcd4',
   },
   avatar: {
@@ -27,21 +27,20 @@ const style = {
     color: 'white',
   },
 };
-const profPic = localStorage.getItem('profPic');
 
 const logout = () => {
   localStorage.clear();
   window.location.href = '/';
 };
 
-const Menu = () => (
-  <Toolbar className="toolbar" style={style.menuBar}>
+const NavBar = ({ profPic, name }) => (
+  <Toolbar className="toolbar" style={style.navBar}>
     <ToolbarGroup firstChild>
       <ToolbarTitle style={style.brand} text="KHALI"/>
     </ToolbarGroup>
     <ToolbarGroup lastChild>
       <div style={style.greeting}>
-        Hello {localStorage.getItem('name')}
+        Hello {name}
       </div>
       <Avatar
         style={style.avatar}
@@ -57,4 +56,8 @@ const Menu = () => (
   </Toolbar>
 );
 
-export default Menu;
+NavBar.propTypes = {
+  profPic: React.PropTypes.string,
+  name: React.PropTypes.string,
+};
+export default NavBar;

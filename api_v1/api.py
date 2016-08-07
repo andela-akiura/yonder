@@ -2,26 +2,29 @@
 from custom_storage import AmazonStorage as store
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage as storage
-from models import Image, ThumbnailImage, ThumbnailFilter
+from models import Image, ThumbnailImage, ThumbnailFilter, Folder
 from random import randint
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from serializers import UserSerializer, ImageSerializer, \
-    ThumbnailImageSerializer
-from filter_boy import filters, filter_names
+    ThumbnailImageSerializer, FolderSerializer
+from filter_boy import filters
+from django.core.exceptions import ObjectDoesNotExist
 import cStringIO
 import os
 
 
 class UserCreateView(viewsets.ModelViewSet):
     """Create new users."""
+
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
 
     def create(self, request):
+        """Create a new user."""
         data = request.data
         username, email = data.get('username'), data.get('email')
         password, confirm_password = data.get('password'),\
@@ -58,20 +61,33 @@ class ImageView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        """Get only objetcs created by this user."""
         return Image.objects.all().filter(
-            created_by=self.request.user.username)
+            created_by=self.request.user)
 
     def create(self, request):
-        """Upload Images."""
+        """Upload Images to Amazon S3."""
         data = request.data
         folder_name, original_image = data.get('folder_name'), \
             data.get('original_image')
-        created_by = request.user.username if request.user.username else ''
+        created_by = request.user
+        if folder_name:
+            try:
+                folder = Folder.objects.get(folder_name=folder_name)
+            except ObjectDoesNotExist:
+                folder = Folder.objects.create(
+                    folder_name=folder_name, created_by=created_by)
+
         if original_image:
-            image = Image.objects.create(folder_name=folder_name,
+            image = Image.objects.create(folder=folder,
                                          original_image=original_image,
                                          created_by=created_by)
             original = image.original_image
+            size_in_kb = float(image.original_image.size) / 1000
+            if size_in_kb >= 1000:
+                image.image_size = '{:,.2} MB'.format(size_in_kb/1000)
+            else:
+                image.image_size = '{} KB'.format(int(size_in_kb))
             file_name, extension = os.path.splitext(original.name)
             path = file_name + extension
             large_img = storage.open(original.name, 'r')
@@ -86,19 +102,28 @@ class ImageView(viewsets.ModelViewSet):
             return Response({'id': image.id,
                              'image_url': image.original_image.url,
                              'image_name': image.image_name,
-                             'folder_name': image.folder_name},
+                             'image_size': image.image_size,
+                             'folder_id': folder.id,
+                             'folder_name': folder.folder_name},
                             status=status.HTTP_201_CREATED)
         else:
             return Response({'error':
                              'Image file not uploaded.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request):
+        """Return a list of imagges organized into folders."""
+        folders = Folder.objects.filter(created_by=request.user).all()
+        serializer = FolderSerializer(folders, many=True,)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def update(self, request, pk):
+        """Modify the image by saving changes or applying a filter."""
         filter_name = request.data.get('filter_name', 'NONE')
         save_changes = request.data.get('save_changes', 0)
         image = Image.objects.get(pk=pk)
         image.filter_name = filter_name
-        original, filtered = image.original_image, image.filtered_image
+        original = image.original_image
         name, extension = os.path.splitext(original.name)
         path = name + str(randint(0, 9)) + extension
 
@@ -123,6 +148,16 @@ class ImageView(viewsets.ModelViewSet):
 
 
 class ThumbnailView(viewsets.ModelViewSet):
+    """
+    Upload and access thumbnails.
+
+    URL:
+        /api/v1/thumbnails/
+
+    Methods:
+        GET, PUT, POST
+    """
+
     queryset = ThumbnailImage.objects.all()
     serializer_class = ThumbnailImageSerializer
     permissions_classes = (IsAuthenticated,)
@@ -135,7 +170,7 @@ class ThumbnailView(viewsets.ModelViewSet):
             thumb_image = ThumbnailImage.objects.create(thumbnail=thumbnail)
             # create filters
             original = thumb_image.thumbnail
-            for filter_name in filter_names:
+            for filter_name in filters.iterkeys():
                 file_name, extension = os.path.splitext(original.name)
                 path = file_name + filter_name + extension
                 old_thumb = storage.open(original.name, 'r')
@@ -144,9 +179,9 @@ class ThumbnailView(viewsets.ModelViewSet):
                 store.upload_to_amazons3(path, temp_thumb)
                 temp_thumb.close()
                 thumb_name = 'images/thumbnails/' + os.path.basename(path)
-                ThumbnailFilter.objects.create(filtered=thumb_name,
+                ThumbnailFilter.objects.create(filtered_thumbnail=thumb_name,
                                                filter_name=filter_name,
-                                               original=thumb_image)
+                                               original_thumbnail=thumb_image)
                 updated_thumb = ThumbnailImage.objects.get(pk=thumb_image.id)
                 serializer = ThumbnailImageSerializer(updated_thumb)
                 serializer = self.get_serializer(data=serializer.data)

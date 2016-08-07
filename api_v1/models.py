@@ -1,6 +1,6 @@
 from __future__ import unicode_literals  # pragma: no cover
 from django.db import models  # pragma: no cover
-from custom_storage import CustomStorage
+from django.contrib.auth.models import User
 
 FILTERS = (
     ('NONE', 'none',),
@@ -15,7 +15,15 @@ FILTERS = (
     ('GRAYSCALE', 'grayscale'),
     ('FIND_EDGES', 'find edges'),
 )
-storage = CustomStorage()
+
+
+class Folder(models.Model):
+    """Model for the folders to hold images."""
+
+    folder_name = models.CharField(max_length=100, blank=True,
+                                   default='untitled')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   blank=True)
 
 
 class Image(models.Model):
@@ -23,12 +31,15 @@ class Image(models.Model):
 
     original_image = models.ImageField(upload_to='images/', blank=False)
     filtered_image = models.ImageField(upload_to='images/', blank=True)
-    created_by = models.CharField(max_length=100, blank=True, default='')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
+                                   blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     filter_name = models.CharField(max_length=100, choices=FILTERS,
                                    default='NONE')
-    folder_name = models.CharField(max_length=100, blank=True, default='')
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE,
+                               related_name='images', blank=True)
+    image_size = models.CharField(max_length=250, default='')
     image_name = models.CharField(max_length=100, blank=True, default='')
 
 
@@ -39,8 +50,9 @@ class ThumbnailImage(models.Model):
 
 class ThumbnailFilter(models.Model):
     """Model for the filtered thumbnails."""
-    filtered = models.ImageField(upload_to='images/thumbnails/', blank=False)
+    filtered_thumbnail = models.ImageField(
+        upload_to='images/thumbnails/', blank=False)
     filter_name = models.CharField(max_length=100, choices=FILTERS,
                                    default='NONE')
-    original = models.ForeignKey(ThumbnailImage, on_delete=models.CASCADE,
-                                 related_name="filters")
+    original_thumbnail = models.ForeignKey(
+        ThumbnailImage, on_delete=models.CASCADE, related_name="filters")
