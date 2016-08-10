@@ -6,7 +6,7 @@ from PIL import Image, ImageFilter, ImageEnhance
 class Filter():
     """Collection of methods to filter images."""
 
-    def __init__(self):
+    def __init__(self):  # pragma: no cover
         pass
 
     @staticmethod

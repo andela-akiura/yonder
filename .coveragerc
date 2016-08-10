@@ -1,3 +1,9 @@
 [report]
-
-omit = ../*migrations*
+omit=
+    *site-packages/*
+    *site-packages/nose/*
+    *__init__*
+    *tests/*
+    *migrations/*
+    *admin.py*
+    *models.py*

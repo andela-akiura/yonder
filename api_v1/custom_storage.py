@@ -1,18 +1,18 @@
 """Modifies the django file saving mechanism."""
 
-from boto.s3.key import Key
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
-from storages.backends.s3boto import S3BotoStorage
-import boto
-import mimetypes
+from boto.s3.key import Key # pragma: no cover
+from django.core.files.storage import FileSystemStorage # pragma: no cover
+from django.conf import settings # pragma: no cover
+from storages.backends.s3boto import S3BotoStorage # pragma: no cover
+import boto # pragma: no cover
+import mimetypes # pragma: no cover
 
-class CustomStorage(FileSystemStorage):
+class CustomStorage(FileSystemStorage): # pragma: no cover
     def get_available_name(self, name, max_length=None):
         return name
 
 
-class MediaStorage(S3BotoStorage):
+class MediaStorage(S3BotoStorage): # pragma: no cover
     """Override default storage to use cloudfront instead of Amazon S3 urls."""
 
     def __init__(self, *args, **kwargs):
@@ -23,8 +23,8 @@ class MediaStorage(S3BotoStorage):
 class AmazonStorage:
     """Class with helper methods to manage file manipulation on AWS S3."""
 
-    def __init__(self):
-        pass
+    def __init__(self): # pragma: no cover
+        pass  # pragma: no cover
 
     @staticmethod
     def upload_to_amazons3(path, data_file):
