@@ -41,16 +41,32 @@ cd khali
 ```
 Install the necessary packages
 ```
-
 pip install -r requirements.txt
 ```
+Setup the database:
+* Install PgAdmin
+* Create a database with a user called `heavy_machinery`
 
+Perform migrations by running:
+* `python manage.py makemigrations`
+* `python manage.py migrate`
 
-## Perform migrations
+Create a .env.yml in the root directory to hold the environment variables.
 ```
-python manage.py makemigrations
-python manage.py migrate
+AWS_S3_SECRET_ACCESS_KEY:
+  "Your Amazon S3 Secret Key"
+AWS_S3_ACCESS_KEY_ID:
+  "Your Amazon S3 Access Key ID"
+AWS_STORAGE_BUCKET_NAME:
+  "Your bucket name"
+FB_KEY:
+  "Your Facebook app ID"
+FB_SECRET:
+  "Your Facebook Secret Key"
 ```
+
+Start the development server by running `python manage.py runserver`
+
 
 ## Testing
 To run the tests for the app, and see the coverage, run
