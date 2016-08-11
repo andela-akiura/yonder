@@ -29,6 +29,9 @@ This app Version 1.0 (the first version).
 ## Documentation
 Documentation is available [here](http://khali.herokuapp.com/docs/)
 
+## Project Plan
+You can check the project plan [here](https://github.com/andela-akiura/khali/blob/feature-review/assets/PROJECTPLAN.md)
+
 ## Installation
 Clone the repo
 ```
