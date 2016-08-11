@@ -27,7 +27,7 @@ You can test the app [here](http://khali.herokuapp.com)
 This app Version 1.0 (the first version).
 
 ## Documentation
-Documentation is available [here](http://khali..herokuapp.com/docs/)
+Documentation is available [here](http://khali.herokuapp.com/docs/)
 
 ## Installation
 Clone the repo
@@ -50,6 +50,16 @@ Setup the database:
 Perform migrations by running:
 * `python manage.py makemigrations`
 * `python manage.py migrate`
+
+Setup a Facebook app for authorization:
+* Create a Facebook app and get the Id and Secret key [here](https://developers.facebook.com/apps/)
+
+Setup an Amazon s3 account for storage
+* [Create a bucket](http://docs.aws.amazon.com/AmazonS3/latest/UG/CreatingaBucket.html)
+* Create a new user [here](https://console.aws.amazon.com/iam/home?#users).
+* Click "Manage access keys".
+* Download the credentials for the access key created.
+* Create a bucket policy for your newly created bucket.
 
 Create a .env.yml in the root directory to hold the environment variables.
 ```
