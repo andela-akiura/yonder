@@ -1,7 +1,7 @@
 # from django.test import TestCase
 from rest_framework.test import APITestCase
 from rest_framework import status
-import os
+
 
 class UserRegister(APITestCase):
 
@@ -13,7 +13,7 @@ class UserRegister(APITestCase):
              })
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_no_matching_passwords(self):
+    def test_passwords_dont_match(self):
         response = self.client.post('/api/v1/auth/register/',
                                     {'username': 'mr_nganya',
                                      'email': 'mrnganya@gmail.com',

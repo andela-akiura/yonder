@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Menu from './menu.jsx';
+import NavBar from './navBar.jsx';
 import SideBar from './sideBar.jsx';
 import Thumbnail from './thumbnail.jsx';
 import request from 'superagent';
@@ -17,11 +17,14 @@ import SelectField from 'material-ui/SelectField';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
 import {
   Step,
   Stepper,
   StepLabel,
 } from 'material-ui/Stepper';
+import Clipboard from 'clipboard';
+
 
 const style = {
   container: {
@@ -61,13 +64,13 @@ const style = {
     width: '40px',
     height: '40px',
     position: 'relative',
-    // zIndex: '10',
   },
   buttonGroup: {
     margin: 'auto',
     display: 'flex',
     position: 'relative ',
-    width: '75%',
+    width: '90%',
+    height: '45px',
   },
   button: {
     margin: '5px',
@@ -184,7 +187,6 @@ class Home extends Component {
     super();
     this.state = {
       folders: [],
-      folderNames: [],
       defaultImage: '/static/images/placeholder.png',
       activeImage: '/static/images/placeholder.png',
       thumbnails: [],
@@ -196,9 +198,11 @@ class Home extends Component {
       stepIndex: 0,
       saveFilters: 0,
       newImageName: 'No image chosen',
-      newFolderName: '',
+      newFolderName: ' ',
       uploadedImage: {},
       showNoImageWarning: false,
+      showCopyConfirmation: false,
+      warningMessage: '',
     };
     this.updateCanvas = this.updateCanvas.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
@@ -215,14 +219,16 @@ class Home extends Component {
     this.persistFilter = this.persistFilter.bind(this);
     this.toggleEmptyImageFilter = this.toggleEmptyImageFilter.bind(this);
     this.undoFilter = this.undoFilter.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCopyConfirm = this.handleCopyConfirm.bind(this);
+    this.onCloseCopyConfirm = this.onCloseCopyConfirm.bind(this);
   }
 
   componentDidMount() {
     if (localStorage.getItem('accessToken')) {
       fetchImages('/api/v1/images/').then((response) => {
-        const folderNames = generateFolders(response);
-        const folders = organizeImages(response, folderNames);
-        this.setState({ folders, folderNames });
+        const folders = response;
+        this.setState({ folders });
       });
       fetchImages('/api/v1/thumbnails/').then((response) => {
         const thumbnails = response[0].filters;
@@ -245,9 +251,16 @@ class Home extends Component {
     this.setState({ showFilters: !this.state.showFilters });
   }
 
+  handleChange(event, index, value) {
+    this.setState({ newFolderName: value });
+  }
+
   applyFilters(filterName) {
     if (this.state.activeImage === this.state.defaultImage) {
-      this.setState({ showNoImageWarning: true });
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'Please select an image before applying a filter',
+      });
       return;
     }
     // show progress indicator
@@ -268,6 +281,13 @@ class Home extends Component {
   }
 
   persistFilter() {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'No changes to save.',
+      });
+      return;
+    }
     this.setState({ saveFilters: 1, filterStatus: 'loading' }, () => {
       updateImages(`http://${window.location.host}/api/v1/images/${this.state.currentImage.id}/`,
         { filter_name: 'NONE', save_changes: this.state.saveFilters })
@@ -286,6 +306,13 @@ class Home extends Component {
   }
 
   shareImage() {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'Please select an image to share',
+      });
+      return;
+    }
     event.preventDefault();
     window.FB.ui({
       method: 'share',
@@ -297,6 +324,13 @@ class Home extends Component {
   }
 
   toggleDeleteDialog() {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'Please select an image first.',
+      });
+      return;
+    }
     this.setState({
       showDeleteDialog: !this.state.showDeleteDialog,
     });
@@ -316,7 +350,7 @@ class Home extends Component {
     deleteImage(`/api/v1/images/${this.state.currentImage.id}/`)
       .then(() => {
         fetchImages('/api/v1/images/').then((response) => {
-          const folders = organizeImages(response, generateFolders(response));
+          const folders = response;
           this.setState({ folders });
         });
         this.setState({
@@ -329,6 +363,7 @@ class Home extends Component {
   toggleUploadDialog() {
     this.setState({
       showUploadDialog: !this.state.showUploadDialog,
+      newFolderName: '',
     });
   }
 
@@ -354,9 +389,8 @@ class Home extends Component {
         currentImage: response,
       });
       fetchImages('/api/v1/images/').then((images) => {
-        const folders = organizeImages(images, generateFolders(images));
-        const folderNames = generateFolders(images);
-        this.setState({ folders, folderNames, stepIndex: 0, newFolderName: '', newImageName: '' });
+        const folders = images;
+        this.setState({ folders, stepIndex: 0, newImageName: '' });
       });
     });
   }
@@ -384,17 +418,36 @@ class Home extends Component {
     }
   }
 
-  selectFolder(event, index, value) {
-    if (event.target.value === undefined) {
-      this.setState({ newFolderName: value });
-    } else {
-      this.setState({ newFolderName: event.target.value });
-    }
+  selectFolder(event) {
+    this.setState({ newFolderName: event.target.value });
   }
 
   undoFilter() {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'No changes to undo.',
+      });
+      return;
+    }
     this.updateCanvas(this.state.currentImage);
   }
+
+  handleCopyConfirm() {
+    if (this.state.activeImage === this.state.defaultImage) {
+      this.setState({
+        showNoImageWarning: true,
+        warningMessage: 'Please select an image first',
+      });
+      return;
+    }
+    this.setState({ showCopyConfirmation: true });
+  }
+
+  onCloseCopyConfirm() {
+    this.setState({ showCopyConfirmation: false });
+  }
+
 
   render() {
     const names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'EMBOSS',
@@ -439,16 +492,19 @@ class Home extends Component {
           />
       </div>,
       <div style={contentStyle}>
-        <SelectField hintText="Select existing folder"
-          value={this.state.newFolderName} maxHeight={200}
-          onChange={this.selectFolder}
-          disabled={this.state.folderNames.length < 1}
-        >
-          {this.state.folderNames.map(
-            (name, index) => (
-              <MenuItem value={name} key={index} primaryText={name} />
-            ))}
+      <SelectField value={this.state.newFolderName} onChange={this.handleChange}
+        hintText="Select existing folder"
+      >
+      {this.state.folders.map(
+        (folder) => (
+          <MenuItem
+            key={folder.id}
+            value={folder.folder_name}
+            primaryText={folder.folder_name}
+          />
+        ))}
         </SelectField>
+        <br />
         <p>Or</p>
         <TextField hintText="Enter new folder name" onChange={this.selectFolder}
           value={this.state.newFolderName}
@@ -478,9 +534,10 @@ class Home extends Component {
         />
       </div>,
     ];
+    const copyButton = new Clipboard('.copy');
     return (<MuiThemeProvider muiTheme={getMuiTheme()}>
           <div style={style.container}>
-            <Menu />
+            <NavBar />
             <div className="row start-xs">
               <div style={style.sideBar} className="col-xs-3">
 
@@ -525,10 +582,10 @@ class Home extends Component {
                 <Card >
                 <Snackbar
                   open={this.state.showNoImageWarning}
-                  message="Please select an image before applying a filter"
+                  message={this.state.warningMessage}
                   autoHideDuration={4000}
                   onRequestClose={this.toggleEmptyImageFilter}
-                  style={{ transform: 'translateY(-350%)' }}
+                  style={{ transform: 'translateY(10%)' }}
                 />
                 <br />
                   <CardMedia>
@@ -543,13 +600,14 @@ class Home extends Component {
                     Are you sure you want to delete the image?
                   </Dialog>
                   <div style={style.buttonGroup}>
-                    <FlatButton
+                    <IconButton tooltip="Undo"
                       style={style.button}
-                      primary
-                      icon={<FontIcon className="fa fa-undo"/>}
                       onClick={this.undoFilter}
-                    />
+                    >
+                      <FontIcon className="fa fa-undo"/>
+                    </IconButton>
                     <RaisedButton
+                      tooltip="download"
                       style={style.button}
                       primary href={this.state.activeImage}
                       label="Download" download
@@ -561,6 +619,26 @@ class Home extends Component {
                       onClick={this.shareImage}
                       icon={<FontIcon className="fa fa-facebook-official"/>}
                     />
+                    <div
+                      style={style.button}
+                      className="copy"
+                      data-clipboard-text={this.state.activeImage}
+                    >
+                    <RaisedButton
+                      label="Copy url"
+                      primary
+                      onClick={this.handleCopyConfirm}
+                    />
+                    </div>
+                    <Snackbar
+                      open={this.state.showCopyConfirmation}
+                      message="Copied."
+                      autoHideDuration={2000}
+                      onRequestClose={this.onCloseCopyConfirm}
+                      style={{ transform: 'translateY(10%)' }}
+                    />
+
+                    {}
                     <RaisedButton
                       primary
                       style={style.button} label="Save changes"

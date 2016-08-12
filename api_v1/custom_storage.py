@@ -1,15 +1,9 @@
 """Modifies the django file saving mechanism."""
 
-from boto.s3.key import Key # pragma: no cover
-from django.core.files.storage import FileSystemStorage # pragma: no cover
-from django.conf import settings # pragma: no cover
-from storages.backends.s3boto import S3BotoStorage # pragma: no cover
-import boto # pragma: no cover
-import mimetypes # pragma: no cover
-
-class CustomStorage(FileSystemStorage): # pragma: no cover
-    def get_available_name(self, name, max_length=None):
-        return name
+from django.conf import settings  # pragma: no cover
+from storages.backends.s3boto import S3BotoStorage  # pragma: no cover
+from boto import connect_s3  # pragma: no cover
+import mimetypes  # pragma: no cover
 
 
 class MediaStorage(S3BotoStorage): # pragma: no cover
@@ -30,7 +24,7 @@ class AmazonStorage:
     def upload_to_amazons3(path, data_file):
         """Upload data file to key <path>."""
         try:
-            conn = boto.connect_s3(settings.AWS_S3_ACCESS_KEY_ID,
+            conn = connect_s3(settings.AWS_S3_ACCESS_KEY_ID,
                                    settings.AWS_S3_SECRET_ACCESS_KEY)
             bucket = conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME,
                                      validate=False)

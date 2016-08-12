@@ -5,7 +5,7 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 
 
 const style = {
-  menuBar: {
+  navBar: {
     backgroundColor: '#00bcd4',
   },
   avatar: {
@@ -34,8 +34,8 @@ const logout = () => {
   window.location.href = '/';
 };
 
-const Menu = () => (
-  <Toolbar className="toolbar" style={style.menuBar}>
+const NavBar = () => (
+  <Toolbar className="toolbar" style={style.navBar}>
     <ToolbarGroup firstChild>
       <ToolbarTitle style={style.brand} text="KHALI"/>
     </ToolbarGroup>
@@ -57,4 +57,4 @@ const Menu = () => (
   </Toolbar>
 );
 
-export default Menu;
+export default NavBar;

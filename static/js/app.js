@@ -4,8 +4,8 @@ import Main from './components/main.jsx';
 import LoginForm from './components/login.jsx';
 import React from 'react';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+// import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin();
 
 const routes = (
   <Router history={browserHistory}>

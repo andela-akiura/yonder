@@ -110,7 +110,3 @@ filters = {
     'COMPRESS': Filter.compress,
     'FLIP': Filter.flip,
 }
-
-filter_names = ['BLUR', 'CONTOUR', 'DETAIL', 'EDGE_ENHANCE', 'SMOOTH_MORE',
-                'SMOOTH', 'SHARPEN', 'GRAYSCALE', 'FIND_EDGES', 'COMPRESS',
-                'FLIP']
