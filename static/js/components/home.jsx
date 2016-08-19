@@ -535,13 +535,16 @@ class Home extends Component {
       </div>,
     ];
     const copyButton = new Clipboard('.copy');
+    const profPic = localStorage.getItem('profPic');
+    const name = localStorage.getItem('name');
     return (<MuiThemeProvider muiTheme={getMuiTheme()}>
           <div style={style.container}>
-            <NavBar />
+            <NavBar profPic={profPic} name={name} />
             <div className="row start-xs">
               <div style={style.sideBar} className="col-xs-3">
 
               <RaisedButton
+                className="upload-button"
                 style={style.uploadButton}
                 label="Upload"
                 labelPosition="before"
@@ -589,7 +592,7 @@ class Home extends Component {
                 />
                 <br />
                   <CardMedia>
-                    <img height="500" width="800" style={style.image}
+                    <img className="canvas" height="500" width="800" style={style.image}
                       src={this.state.activeImage}
                     />
                   </CardMedia>
@@ -607,6 +610,7 @@ class Home extends Component {
                       <FontIcon className="fa fa-undo"/>
                     </IconButton>
                     <RaisedButton
+                      className="download-button"
                       tooltip="download"
                       style={style.button}
                       primary href={this.state.activeImage}
@@ -614,6 +618,7 @@ class Home extends Component {
                       icon={<FontIcon className="fa fa-cloud-download"/>}
                     />
                     <RaisedButton
+                      className="fb-share-button"
                       labelColor="#eef1f8" backgroundColor="#4468b3"
                       style={style.button} label="Share"
                       onClick={this.shareImage}
@@ -625,6 +630,7 @@ class Home extends Component {
                       data-clipboard-text={this.state.activeImage}
                     >
                     <RaisedButton
+                      className="copy-url-button"
                       label="Copy url"
                       primary
                       onClick={this.handleCopyConfirm}
@@ -640,12 +646,12 @@ class Home extends Component {
 
                     {}
                     <RaisedButton
+                      className="save_changes-button"
                       primary
                       style={style.button} label="Save changes"
                       onClick={this.persistFilter}
                       icon={<FontIcon className="fa fa-save"/>}
                     />
-
                     <RaisedButton
                       style={style.button}
                       secondary
@@ -654,8 +660,6 @@ class Home extends Component {
                       icon={<FontIcon className="fa fa-trash"/>}
                     />
                   </div>
-
-
                 </Card>
                   <div className="row">
                   <Subheader>Filters</Subheader>
@@ -666,7 +670,7 @@ class Home extends Component {
                     {this.state.thumbnails.map((thumb, index) => (
                       <Thumbnail
                         thumbnail={thumb} id={index} key={index}
-                        tabIndex={thumb.id} styling={style}
+                        tabIndex={thumb.id} styling={style.gridTile}
                         _onClick={this.applyFilters}
                       />
                     ))}

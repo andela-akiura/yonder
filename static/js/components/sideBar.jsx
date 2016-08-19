@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
@@ -9,8 +9,7 @@ indigo900,
 } from 'material-ui/styles/colors';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import IconButton from 'material-ui/IconButton';
-import Popover from 'material-ui/Popover';
-import moment from 'moment'
+import moment from 'moment';
 
 
 class SideBar extends Component {
@@ -49,6 +48,7 @@ class SideBar extends Component {
         <Subheader>Uploaded photos</Subheader>
         {this.props.folders.map((folder) => (
           <ListItem
+            className="folder"
             primaryText={folder.folder_name}
             primaryTogglesNestedList
             leftAvatar={<Avatar
@@ -60,6 +60,7 @@ class SideBar extends Component {
             nestedItems={
               folder.images.map((image) => (
                   <ListItem
+                    className="image"
                     key={image.id}
                     leftAvatar={<Avatar src={image.original_image} size={50}/>}
                     primaryText={<div src={image.original_image}>{image.image_name}</div>}
@@ -68,7 +69,7 @@ class SideBar extends Component {
                     rightIconButton={
                       <IconButton onClick={this.handleInfoClick.bind(null, image.id)}><ActionInfo /></IconButton>
                     }
-                    onTouchTap={this.handleImageClick.bind(null, image)}
+                    onClick={this.handleImageClick.bind(null, image)}
                   >
                     {this.state.showInfo && this.state.activeNode === image.id ?
                       <div key={image.id}>

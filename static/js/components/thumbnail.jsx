@@ -9,7 +9,7 @@ const Thumbnail = ({ thumbnail, styling, _onClick, id }) => {
   return (<GridTile
     className="grow"
     tabIndex={id}
-    style={styling.gridTile}
+    style={styling}
     title={<p style={styling.filterName}>{thumbnail.filter_name}</p>}
     onClick={onFilterClick}
   >

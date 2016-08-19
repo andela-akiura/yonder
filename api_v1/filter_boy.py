@@ -7,11 +7,21 @@ class Filter():
     """Collection of methods to filter images."""
 
     def __init__(self):  # pragma: no cover
+        """Empty init."""
         pass
 
     @staticmethod
     def blur(old_photo, new_photo):
-        """Apply the BLUR filter."""
+        """Apply the the BLUR filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.BLUR)
         image.save(new_photo, "JPEG")
@@ -19,14 +29,32 @@ class Filter():
 
     @staticmethod
     def compress(old_photo, new_photo):
-        """Apply the BLUR filter."""
+        """Compress an image.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    compressed image.
+
+        Returns:
+            new_photo: A file object of the compressed image.
+        """
         image = Image.open(old_photo)
         image.save(new_photo, "JPEG", optimize=True, quality=40)
         return new_photo
 
     @staticmethod
     def smooth(old_photo, new_photo):
-        """Apply the SMOOTH filter."""
+        """Apply the SMOOTH filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.SMOOTH)
         image.save(new_photo, "JPEG")
@@ -34,7 +62,16 @@ class Filter():
 
     @staticmethod
     def grayscale(old_photo, new_photo):
-        """Return a black & white image."""
+        """Create a black and white version of an image.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A black and white image.
+        """
         image = Image.open(old_photo)
         enhancer = ImageEnhance.Color(image)
         image = enhancer.enhance(0.0)
@@ -43,7 +80,16 @@ class Filter():
 
     @staticmethod
     def detail(old_photo, new_photo):
-        """Apply the DETAIL filter."""
+        """Apply the DETAIL filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.DETAIL)
         image.save(new_photo, "JPEG")
@@ -51,7 +97,16 @@ class Filter():
 
     @staticmethod
     def contour(old_photo, new_photo):
-        """Apply the CONTOUR filter."""
+        """Apply the CONTOUR filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.CONTOUR)
         image.save(new_photo, "JPEG")
@@ -59,7 +114,16 @@ class Filter():
 
     @staticmethod
     def smooth_more(old_photo, new_photo):
-        """Apply the smooth more filter."""
+        """Apply the SMOOTH_MORE filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.SMOOTH_MORE)
         image.save(new_photo, "JPEG")
@@ -67,7 +131,16 @@ class Filter():
 
     @staticmethod
     def sharpen(old_photo, new_photo):
-        """Apply the SHARPEN filter."""
+        """Apply the SHARPEN filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.SHARPEN)
         image.save(new_photo, "JPEG")
@@ -75,7 +148,16 @@ class Filter():
 
     @staticmethod
     def find_edges(old_photo, new_photo):
-        """Apply the FIND_EDGES filter."""
+        """Apply the FIND_EDGES filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_photo)
         image = image.filter(ImageFilter.FIND_EDGES)
         image.save(new_photo, "JPEG")
@@ -83,7 +165,16 @@ class Filter():
 
     @staticmethod
     def edge_enhance(old_old_photo, new_photo):
-        """Apply the EDGE_ENHANCE filter."""
+        """Apply the EDGE_ENHANCE filter.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    filtered image.
+
+        Returns:
+            new_photo: A file object of the filtered image.
+        """
         image = Image.open(old_old_photo)
         image = image.filter(ImageFilter.EDGE_ENHANCE)
         image.save(new_photo, "JPEG")
@@ -91,7 +182,16 @@ class Filter():
 
     @staticmethod
     def flip(old_old_photo, new_photo):
-        """Flip the photo by 180 degrees."""
+        """Rotate a photo by 180 degress.
+
+        Args:
+            old_photo (File): The uploaded photo.
+            new_photo (StringIO): A file like object which stores the newly
+                                    rotated image.
+
+        Returns:
+            new_photo: A file object of the rotated image.
+        """
         image = Image.open(old_old_photo)
         image = image.transpose(Image.ROTATE_180)
         image.save(new_photo, "JPEG")

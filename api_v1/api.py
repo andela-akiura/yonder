@@ -18,11 +18,13 @@ import os
 
 class UserCreateView(viewsets.ModelViewSet):
     """Create new users."""
+
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
 
     def create(self, request):
+        """Create a new user."""
         data = request.data
         username, email = data.get('username'), data.get('email')
         password, confirm_password = data.get('password'),\
@@ -59,11 +61,12 @@ class ImageView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        """Get only objetcs created by this user."""
         return Image.objects.all().filter(
             created_by=self.request.user)
 
     def create(self, request):
-        """Upload Images."""
+        """Upload Images to Amazon S3."""
         data = request.data
         folder_name, original_image = data.get('folder_name'), \
             data.get('original_image')
@@ -109,12 +112,13 @@ class ImageView(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
+        """Return a list of imagges organized into folders."""
         folders = Folder.objects.filter(created_by=request.user).all()
         serializer = FolderSerializer(folders, many=True,)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     def update(self, request, pk):
+        """Modify the image by saving changes or applying a filter."""
         filter_name = request.data.get('filter_name', 'NONE')
         save_changes = request.data.get('save_changes', 0)
         image = Image.objects.get(pk=pk)
@@ -144,6 +148,16 @@ class ImageView(viewsets.ModelViewSet):
 
 
 class ThumbnailView(viewsets.ModelViewSet):
+    """
+    Upload and access thumbnails.
+
+    URL:
+        /api/v1/thumbnails/
+
+    Methods:
+        GET, PUT, POST
+    """
+
     queryset = ThumbnailImage.objects.all()
     serializer_class = ThumbnailImageSerializer
     permissions_classes = (IsAuthenticated,)

@@ -48,7 +48,7 @@ const onSuccessfulLogin = (resp) => {
   window.location.href = '/home';
 };
 
-const login = () => {
+let login = () => {
   window.FB.login((payload) => {
     if (payload.authResponse) {
       window.FB.api('/me', { fields: 'name,picture' }, (me) => {
@@ -60,7 +60,10 @@ const login = () => {
 };
 
 
-const LoginForm = () => {
+const LoginForm = (_onCLick) => {
+  if (_onCLick) {
+    login = _onCLick;
+  }
   return (
     <MuiThemeProvider muiTheme={getMuiTheme()}>
     <div style={style.background}>
