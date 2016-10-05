@@ -1,4 +1,4 @@
-# khali
+# KHALI
 A photo editing application.
 
 [![Build Status](https://travis-ci.org/andela-akiura/khali.svg?branch=feature-review)](https://travis-ci.org/andela-akiura/khali)
