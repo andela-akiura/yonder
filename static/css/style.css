@@ -1,0 +1,38 @@
+body {
+    font-family:"Roboto", sans-serif;
+}
+
+html, body{margin:0px; padding:0px;}
+
+.toolbar {
+  padding: 0px 30px !important;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.filter:visited {
+  box-shadow: inset 0 0 0 140px #53a7ea;
+}
+
+.login-button {
+  display: flex;
+  margin: 150px auto;
+  width: 250px;
+  height: 36px;
+  color: #eef1f8;
+}
+
+.grow { transition: all .2s ease-in-out; }
+
+.grow:hover { transform: scale(1.1); }
+
+.social {
+  color: #4468b3 !important;
+}
+
+.spinner {
+  z-index: 15;
+
+}
