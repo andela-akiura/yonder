@@ -32,8 +32,8 @@ class AmazonStorage:
             data_file (File): The file to upload.
 
         Returns (dict):
-            {'status': 'Success'} if upload succesful or
-            {'status': 'Failure', 'error': e.message} if upload not succesful.
+            {'status': 'Success'} if upload successful or
+            {'status': 'Failure', 'error': e.message} if upload not successful.
         """
         try:
             conn = connect_s3(settings.AWS_S3_ACCESS_KEY_ID,
